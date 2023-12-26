@@ -1,0 +1,84 @@
+.menu {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    border-right: 1px solid $color-border;
+    background-color: $gray-50;
+
+    // Navigation
+    nav {
+         ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: center;
+            height: 100%;
+        }
+    
+        li {
+            display: inline-block;
+        }
+
+        a {
+            padding: 1rem 1rem;
+            display: block;
+            text-decoration: none;
+            color: $primary-500;
+
+            i {
+                margin-right: 0.5rem;
+                width: 1rem;
+            }
+        }
+
+        a:hover {
+            color: $primary-700;
+            background-color: $gray-100;
+        }
+    }
+
+    // Profile info
+    &-user {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+
+        &__avatar {
+            width: 5rem;
+            height: 5rem;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+
+        &__name {
+            font-size: $size-base;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        &__role {
+            font-size: $size-sm;
+            color: $gray-500;
+        }
+    }
+
+    // Footer
+    &__logout {
+        margin-top: auto;
+        padding: 1rem;
+        border-top: 1px solid $color-border;
+        font-size: $size-sm;
+        color: $gray-700;
+        text-align: center;
+        text-decoration: none;
+        
+        &:hover {
+            background-color: $gray-100;
+        }
+    }
+}
