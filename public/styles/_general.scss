@@ -1,0 +1,22 @@
+body {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    min-height: 100vh;
+}
+
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.empty--darker {
+    background-color: $gray-100;
+}
+
+// Main content
+.content {
+    padding: 1.5rem;
+}
