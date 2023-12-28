@@ -21,6 +21,15 @@ body {
 .content {
   padding: 1.5rem;
 }
+.content h1 {
+  margin: 0;
+}
+
+section > h2 {
+  padding-top: 0.5rem;
+  margin-top: 2rem;
+  border-top: solid 1px #bdbdbd;
+}
 
 input[type=text],
 input[type=password],
@@ -51,12 +60,11 @@ input[type=submit]:hover {
 
 .button {
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
   padding: 0.5rem 1rem;
-  margin: 0.5rem 0;
   display: inline-block;
   text-decoration: none;
   transition: all 0.2s ease-in-out;
@@ -100,11 +108,14 @@ input[type=submit]:hover {
   display: flex;
   flex-direction: column;
   align-items: left;
-  justify-content: center;
+  justify-content: flex-start;
   height: 100%;
 }
 .menu nav li {
   display: inline-block;
+}
+.menu nav li.active {
+  background-color: #e0e0e0;
 }
 .menu nav a {
   padding: 1rem 1rem;
@@ -190,6 +201,53 @@ input[type=submit]:hover {
 }
 .login-form__links a:hover {
   color: #424242;
+}
+
+.rooms {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  gap: 1rem;
+}
+
+.rooms__card {
+  padding: 2rem;
+  padding-bottom: 1rem;
+  border: 1px solid #bdbdbd;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.1s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+.rooms__card h3 {
+  font-size: 1.2em;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+.rooms__card p, .rooms__card span {
+  font-size: 1em;
+  color: #616161;
+}
+.rooms__card__actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+.rooms__card:hover {
+  background-color: #eeeeee;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.page-header__actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 /*# sourceMappingURL=main.css.map */

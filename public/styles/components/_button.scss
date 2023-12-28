@@ -1,11 +1,11 @@
 .button {
     border: 1px solid $color-border;
-    border-radius: 8px;
+    border-radius: $border-radius;
     cursor: pointer;
     font-size: $size-base;
     font-weight: bold;
     padding: 0.5rem 1rem;
-    margin: 0.5rem 0;
+    // margin: 0.5rem 0;
     display: inline-block;
     text-decoration: none;
     transition: all 0.2s ease-in-out;

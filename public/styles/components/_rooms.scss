@@ -1,0 +1,39 @@
+.rooms {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+    gap: 1rem;
+}
+
+.rooms__card {
+    padding: 2rem;
+    padding-bottom: 1rem;
+    border: 1px solid $gray-400;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    transition: background-color 0.1s ease-in-out;
+    display: flex;
+    flex-direction: column;
+
+    h3 {
+        font-size: 1.2em;
+        margin: 0;
+        margin-bottom: 0.5rem;
+    }    
+
+    p, span {
+        font-size: 1em;
+        color: $gray-700;
+    }
+
+    &__actions {
+        margin-top: auto;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    &:hover {
+        background-color: $gray-200;
+    }
+}

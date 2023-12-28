@@ -1,0 +1,11 @@
+.page-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    &__actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+}

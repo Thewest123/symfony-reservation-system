@@ -19,4 +19,15 @@ body {
 // Main content
 .content {
     padding: 1.5rem;
+
+    h1 {
+        margin: 0;
+    }
+}
+
+// Add solid line between sections
+section > h2 {
+    padding-top: 0.5rem;
+    margin-top: 2rem;
+    border-top: solid 1px $gray-400;
 }
