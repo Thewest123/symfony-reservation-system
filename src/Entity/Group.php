@@ -25,12 +25,17 @@ class Group
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     private Collection $subgroups;
 
-    #[ORM\ManyToOne(inversedBy: 'groups')]
-    private ?Room $room = null;
+    #[ORM\OneToMany(mappedBy: 'ownerGroup', targetEntity: Room::class)]
+    private Collection $rooms;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'groups')]
+    private Collection $users;
 
     public function __construct()
     {
         $this->subgroups = new ArrayCollection();
+        $this->rooms = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,14 +97,59 @@ class Group
         return $this;
     }
 
-    public function getRoom(): ?Room
+    /**
+     * @return Collection<int, Room>
+     */
+    public function getRooms(): Collection
     {
-        return $this->room;
+        return $this->rooms;
     }
 
-    public function setRoom(?Room $room): static
+    public function addRoom(Room $room): static
     {
-        $this->room = $room;
+        if (!$this->rooms->contains($room)) {
+            $this->rooms->add($room);
+            $room->setOwnerGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRoom(Room $room): static
+    {
+        if ($this->rooms->removeElement($room)) {
+            // set the owning side to null (unless already changed)
+            if ($room->getOwnerGroup() === $this) {
+                $room->setOwnerGroup(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeGroup($this);
+        }
 
         return $this;
     }

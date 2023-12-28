@@ -27,12 +27,15 @@ class Room
     #[ORM\ManyToOne(inversedBy: 'managedRooms')]
     private ?User $manager = null;
 
-    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Group::class)]
-    private Collection $groups;
-
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Building $building = null;
+
+    #[ORM\ManyToOne(inversedBy: 'rooms')]
+    private ?Group $ownerGroup = null;
+
+    #[ORM\Column]
+    private ?bool $private = null;
 
     public function __construct()
     {
@@ -127,36 +130,6 @@ class Room
         return $this;
     }
 
-    /**
-     * @return Collection<int, Group>
-     */
-    public function getGroups(): Collection
-    {
-        return $this->groups;
-    }
-
-    public function addGroup(Group $group): static
-    {
-        if (!$this->groups->contains($group)) {
-            $this->groups->add($group);
-            $group->setRoom($this);
-        }
-
-        return $this;
-    }
-
-    public function removeGroup(Group $group): static
-    {
-        if ($this->groups->removeElement($group)) {
-            // set the owning side to null (unless already changed)
-            if ($group->getRoom() === $this) {
-                $group->setRoom(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getBuilding(): ?Building
     {
         return $this->building;
@@ -165,6 +138,30 @@ class Room
     public function setBuilding(?Building $building): static
     {
         $this->building = $building;
+
+        return $this;
+    }
+
+    public function getOwnerGroup(): ?Group
+    {
+        return $this->ownerGroup;
+    }
+
+    public function setOwnerGroup(?Group $ownerGroup): static
+    {
+        $this->ownerGroup = $ownerGroup;
+
+        return $this;
+    }
+
+    public function isPrivate(): ?bool
+    {
+        return $this->private;
+    }
+
+    public function setPrivate(bool $private): static
+    {
+        $this->private = $private;
 
         return $this;
     }

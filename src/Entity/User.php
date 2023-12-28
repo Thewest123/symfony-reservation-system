@@ -35,7 +35,17 @@ class User
     private Collection $managedRooms;
 
     #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Group::class)]
+    private Collection $managedGroups;
+
+    #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
     private Collection $groups;
+
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Role $role = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     public function __construct()
     {
@@ -44,6 +54,7 @@ class User
         $this->rooms = new ArrayCollection();
         $this->managedRooms = new ArrayCollection();
         $this->groups = new ArrayCollection();
+        $this->managedGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,6 +200,36 @@ class User
     /**
      * @return Collection<int, Group>
      */
+    public function getManagedGroups(): Collection
+    {
+        return $this->managedGroups;
+    }
+
+    public function addManagedGroup(Group $group): static
+    {
+        if (!$this->managedGroups->contains($group)) {
+            $this->managedGroups->add($group);
+            $group->setManager($this);
+        }
+
+        return $this;
+    }
+
+    public function removeManagedGroup(Group $group): static
+    {
+        if ($this->managedGroups->removeElement($group)) {
+            // set the owning side to null (unless already changed)
+            if ($group->getManager() === $this) {
+                $group->setManager(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Group>
+     */
     public function getGroups(): Collection
     {
         return $this->groups;
@@ -198,7 +239,6 @@ class User
     {
         if (!$this->groups->contains($group)) {
             $this->groups->add($group);
-            $group->setManager($this);
         }
 
         return $this;
@@ -206,12 +246,31 @@ class User
 
     public function removeGroup(Group $group): static
     {
-        if ($this->groups->removeElement($group)) {
-            // set the owning side to null (unless already changed)
-            if ($group->getManager() === $this) {
-                $group->setManager(null);
-            }
-        }
+        $this->groups->removeElement($group);
+
+        return $this;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): static
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }
