@@ -23,13 +23,13 @@
     <!-- Login form -->
     <div class="login-form__content">
         <form
-                action="{{ path('login') }}"
+                action="{{ path('app_login') }}"
                 method="post"
         >
             <label for="username">Uživatelské jméno</label>
             <input
                     type="text"
-                    name="_username"
+                    name="username"
                     id="username"
                     placeholder="jnovak"
                     value="{{ last_username }}"
@@ -38,7 +38,7 @@
             <label for="password">Heslo</label>
             <input
                     type="password"
-                    name="_password"
+                    name="password"
                     id="password"
                     placeholder="********"
                     required
@@ -58,7 +58,7 @@
     </div>
 
     <div class="login-form__links">
-        <a href="{{ path('register') }}">Registrace</a>
+        <a href="{{ path('app_register') }}">Registrace</a>
     </div>
 
 </main>

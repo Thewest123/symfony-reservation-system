@@ -16,20 +16,23 @@ class Group
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'groups')]
-    private ?User $manager = null;
+    #[ORM\Column(length: 255)]
+    private string $name;
+
+    #[ORM\ManyToOne(inversedBy: 'managedGroups')]
+    private ?User $groupManager = null;
+
+    #[ORM\OneToMany(mappedBy: 'belongsTo', targetEntity: Room::class)]
+    private Collection $rooms;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'groups')]
+    private Collection $users;
 
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'subgroups')]
     private ?self $parent = null;
 
     #[ORM\OneToMany(mappedBy: 'parent', targetEntity: self::class)]
     private Collection $subgroups;
-
-    #[ORM\OneToMany(mappedBy: 'ownerGroup', targetEntity: Room::class)]
-    private Collection $rooms;
-
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'groups')]
-    private Collection $users;
 
     public function __construct()
     {
@@ -43,14 +46,14 @@ class Group
         return $this->id;
     }
 
-    public function getManager(): ?User
+    public function getGroupManager(): ?User
     {
-        return $this->manager;
+        return $this->groupManager;
     }
 
-    public function setManager(?User $manager): static
+    public function setGroupManager(?User $groupManager): static
     {
-        $this->manager = $manager;
+        $this->groupManager = $groupManager;
 
         return $this;
     }
@@ -109,7 +112,7 @@ class Group
     {
         if (!$this->rooms->contains($room)) {
             $this->rooms->add($room);
-            $room->setOwnerGroup($this);
+            $room->setBelongsTo($this);
         }
 
         return $this;
@@ -119,8 +122,8 @@ class Group
     {
         if ($this->rooms->removeElement($room)) {
             // set the owning side to null (unless already changed)
-            if ($room->getOwnerGroup() === $this) {
-                $room->setOwnerGroup(null);
+            if ($room->getBelongsTo() === $this) {
+                $room->setBelongsTo(null);
             }
         }
 
@@ -152,6 +155,16 @@ class Group
         }
 
         return $this;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
     }
 
 

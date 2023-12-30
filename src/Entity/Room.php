@@ -18,24 +18,24 @@ class Room
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'room', targetEntity: Request::class, orphanRemoval: true)]
-    private Collection $requests;
-
-    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'rooms')]
-    private Collection $occupants;
-
     #[ORM\ManyToOne(inversedBy: 'managedRooms')]
-    private ?User $manager = null;
+    private ?User $roomManager = null;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Building $building = null;
 
     #[ORM\ManyToOne(inversedBy: 'rooms')]
-    private ?Group $ownerGroup = null;
+    private ?Group $belongsTo = null;
 
     #[ORM\Column]
-    private ?bool $private = null;
+    private bool $isPrivate = false;
+
+    #[ORM\OneToMany(mappedBy: 'requestedRoom', targetEntity: Request::class, orphanRemoval: true)]
+    private Collection $requests;
+
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'rooms')]
+    private Collection $occupants;
 
     public function __construct()
     {
@@ -73,7 +73,7 @@ class Room
     {
         if (!$this->requests->contains($request)) {
             $this->requests->add($request);
-            $request->setRoom($this);
+            $request->setRequestedRoom($this);
         }
 
         return $this;
@@ -83,8 +83,8 @@ class Room
     {
         if ($this->requests->removeElement($request)) {
             // set the owning side to null (unless already changed)
-            if ($request->getRoom() === $this) {
-                $request->setRoom(null);
+            if ($request->getRequestedRoom() === $this) {
+                $request->setRequestedRoom(null);
             }
         }
 
@@ -118,14 +118,14 @@ class Room
         return $this;
     }
 
-    public function getManager(): ?User
+    public function getRoomManager(): ?User
     {
-        return $this->manager;
+        return $this->roomManager;
     }
 
-    public function setManager(?User $manager): static
+    public function setRoomManager(?User $roomManager): static
     {
-        $this->manager = $manager;
+        $this->roomManager = $roomManager;
 
         return $this;
     }
@@ -142,26 +142,26 @@ class Room
         return $this;
     }
 
-    public function getOwnerGroup(): ?Group
+    public function getBelongsTo(): ?Group
     {
-        return $this->ownerGroup;
+        return $this->belongsTo;
     }
 
-    public function setOwnerGroup(?Group $ownerGroup): static
+    public function setBelongsTo(?Group $belongsTo): static
     {
-        $this->ownerGroup = $ownerGroup;
+        $this->belongsTo = $belongsTo;
 
         return $this;
     }
 
-    public function isPrivate(): ?bool
+    public function isIsPrivate(): ?bool
     {
-        return $this->private;
+        return $this->isPrivate;
     }
 
-    public function setPrivate(bool $private): static
+    public function setIsPrivate(bool $isPrivate): static
     {
-        $this->private = $private;
+        $this->isPrivate = $isPrivate;
 
         return $this;
     }

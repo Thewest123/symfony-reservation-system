@@ -27,10 +27,10 @@
                     class="menu-user__avatar"
             />
             <span class="menu-user__name">{{ app.user.username }}</span>
-            <span class="menu-user__role">{{ app.user.role }}</span>
+            <span class="menu-user__role">{{ app.user.roles[0] }}</span>
         {% else %}
             <a
-                    href="{{ path('login') }}"
+                    href="{{ path('app_login') }}"
                     class="button button--primary"
             >Přihlásit se</a>
         {% endif %}
@@ -58,7 +58,7 @@
 
     {% if is_granted('IS_AUTHENTICATED') %}
         <a
-                href="{{ path('logout') }}"
+                href="{{ path('app_logout') }}"
                 class="menu__logout"
         >Odhlásit se</a>
     {% endif %}

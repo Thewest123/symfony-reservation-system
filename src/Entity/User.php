@@ -5,47 +5,50 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     private ?string $username = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
-    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Request::class, orphanRemoval: true)]
-    private Collection $createdRequests;
+    #[ORM\Column(type: Types::JSON, nullable: false)]
+    private array $roles = ['ROLE_USER'];
+
+    #[ORM\Column(length: 255)]
+    private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: Request::class, mappedBy: 'attendees')]
     private Collection $requests;
 
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Request::class, orphanRemoval: true)]
+    private Collection $createdRequests;
+
     #[ORM\ManyToMany(targetEntity: Room::class, inversedBy: 'occupants')]
     private Collection $rooms;
 
-    #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Room::class)]
+    #[ORM\OneToMany(mappedBy: 'roomManager', targetEntity: Room::class)]
     private Collection $managedRooms;
-
-    #[ORM\OneToMany(mappedBy: 'manager', targetEntity: Group::class)]
-    private Collection $managedGroups;
 
     #[ORM\ManyToMany(targetEntity: Group::class, inversedBy: 'users')]
     private Collection $groups;
 
-    #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Role $role = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $name = null;
+    #[ORM\OneToMany(mappedBy: 'groupManager', targetEntity: Group::class)]
+    private Collection $managedGroups;
 
     public function __construct()
     {
@@ -179,7 +182,7 @@ class User
     {
         if (!$this->managedRooms->contains($managedRoom)) {
             $this->managedRooms->add($managedRoom);
-            $managedRoom->setManager($this);
+            $managedRoom->setRoomManager($this);
         }
 
         return $this;
@@ -189,8 +192,8 @@ class User
     {
         if ($this->managedRooms->removeElement($managedRoom)) {
             // set the owning side to null (unless already changed)
-            if ($managedRoom->getManager() === $this) {
-                $managedRoom->setManager(null);
+            if ($managedRoom->getRoomManager() === $this) {
+                $managedRoom->setRoomManager(null);
             }
         }
 
@@ -209,7 +212,7 @@ class User
     {
         if (!$this->managedGroups->contains($group)) {
             $this->managedGroups->add($group);
-            $group->setManager($this);
+            $group->setGroupManager($this);
         }
 
         return $this;
@@ -219,8 +222,8 @@ class User
     {
         if ($this->managedGroups->removeElement($group)) {
             // set the owning side to null (unless already changed)
-            if ($group->getManager() === $this) {
-                $group->setManager(null);
+            if ($group->getGroupManager() === $this) {
+                $group->setGroupManager(null);
             }
         }
 
@@ -251,18 +254,6 @@ class User
         return $this;
     }
 
-    public function getRole(): ?Role
-    {
-        return $this->role;
-    }
-
-    public function setRole(?Role $role): static
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
     public function getName(): ?string
     {
         return $this->name;
@@ -273,6 +264,32 @@ class User
         $this->name = $name;
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+//        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+            $this->roles = $roles;
+
+            return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+//        $this->password = null;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->username;
     }
 
     public function getGroupsCount(): int
