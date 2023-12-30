@@ -1,20 +1,78 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ ux_controller_link_tags() }}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<html lang="cs">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+    />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="{{ asset('styles/main.css') }}"
+    />
+    <title>{% block title 'Home'|title %} | Rezervační systém</title>
+</head>
+<body>
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<!-- Aside navigation -->
+<aside class="menu">
+
+    <!-- User info -->
+    <div class="menu-user">
+        {% if is_granted('IS_AUTHENTICATED') %}
+            <img
+                    src="https://api.dicebear.com/7.x/personas/svg?seed=Sammy&backgroundType=solid,gradientLinear&body=checkered&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf"
+                    alt="User avatar"
+                    class="menu-user__avatar"
+            />
+            <span class="menu-user__name">{{ app.user.username }}</span>
+            <span class="menu-user__role">{{ app.user.role }}</span>
+        {% else %}
+            <a
+                    href="{{ path('login') }}"
+                    class="button button--primary"
+            >Přihlásit se</a>
+        {% endif %}
+    </div>
+
+    <nav>
+        <ul>
+            <li {% if app.request.get('_route') == 'homepage' %} class="active" {% endif %}>
+                <a href="{{ path('homepage') }}"><i class="fa-solid fa-home"></i> Hlavní strana</a>
+            </li>
+            <li {% if app.request.get('_route') == 'rooms_list' %} class="active" {% endif %}>
+                <a href="{{ path('rooms_list') }}"><i class="fa-solid fa-graduation-cap"></i> Místnosti</a>
+            </li>
+            <li {% if app.request.get('_route') == 'requests_list' %} class="active" {% endif %}>
+                <a href="{{ path('requests_list') }}"><i class="fa-solid fa-pen-to-square"></i> Moje žádosti</a>
+            </li>
+            <li {% if app.request.get('_route') == 'groups_list' %} class="active" {% endif %}>
+                <a href="{{ path('groups_list') }}"><i class="fa-solid fa-user-group"></i> Skupiny</a>
+            </li>
+            <li {% if app.request.get('_route') == 'users_list' %} class="active" {% endif %}>
+                <a href="{{ path('users_list') }}"><i class="fa-solid fa-user"></i> Uživatelé</a>
+            </li>
+        </ul>
+    </nav>
+
+    {% if is_granted('IS_AUTHENTICATED') %}
+        <a
+                href="{{ path('logout') }}"
+                class="menu__logout"
+        >Odhlásit se</a>
+    {% endif %}
+</aside>
+
+<!-- Main content -->
+<main class="content">
+    {% block content %}
+    {% endblock %}
+</main>
+
+{% block javascripts %}
+{% endblock %}
+
+</body>
 </html>
+

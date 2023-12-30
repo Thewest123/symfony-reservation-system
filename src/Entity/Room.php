@@ -165,4 +165,9 @@ class Room
 
         return $this;
     }
+
+    public function getOccupantsCount(): int
+    {
+        return $this->occupants->count();
+    }
 }

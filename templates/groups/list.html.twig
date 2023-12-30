@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Skupiny
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Skupiny</h1>
+        <div class="page-header__actions">
+            <a
+                    href="{{ path('groups_create') }}"
+                    class="button button--primary"
+            >Vytvořit</a
+            >
+        </div>
+    </div>
+
+    <section>
+        <h2>Seznam skupin</h2>
+        <table>
+            <thead>
+            <th scope="col">Název</th>
+            <th scope="col">Správce</th>
+            <th scope="col">Nadřazená skupina</th>
+            <th scope="col">Počet místností</th>
+            <th scope="col">Počet uživatelů</th>
+            <th scope="col">Akce</th>
+            </thead>
+            <tbody>
+            {% for group in groups %}
+                <tr aria-rowindex="{{ group.getId() }}">
+                    <th scope="row">{{ group.getId() }}</th>
+                    <td>
+                        <a href="{{ path('users_detail', {id: group.getManager().getId()}) }}">{{ group.getManager().getName() }}</a>
+                    </td>
+                    <td>{% if group.getParent() is null %}Žádný{% else %}<a
+                            href="{{ path('groups_detail', {id: group.getParent().getId()}) }}">{{ group.getParent() }}</a>{% endif %}
+                    </td>
+                    <td>{{ group.getRoomsCount() }}</td>
+                    <td>{{ group.getUsersCount() }}</td>
+                    <td>
+                        <a
+                                href="{{ path('groups_edit', {id: group.getId()}) }}"
+                                class="button button--primary"
+                        >Upravit</a
+                        >
+                        <a
+                                href="{{ path('groups_delete', {id: group.getId()}) }}"
+                                class="button button--black"
+                        >Odstranit</a
+                        >
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

@@ -153,4 +153,15 @@ class Group
 
         return $this;
     }
+
+
+    public function getRoomsCount(): int
+    {
+        return $this->rooms->count();
+    }
+
+    public function getUsersCount(): int
+    {
+        return $this->users->count();
+    }
 }

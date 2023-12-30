@@ -274,4 +274,14 @@ class User
 
         return $this;
     }
+
+    public function getGroupsCount(): int
+    {
+        return $this->groups->count();
+    }
+
+    public function getManagedRoomsCount(): int
+    {
+        return $this->managedRooms->count();
+    }
 }

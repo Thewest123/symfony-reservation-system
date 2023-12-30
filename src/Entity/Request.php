@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\RequestRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -28,7 +29,7 @@ class Request
     private ?Room $room = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    private ?DateTimeInterface $date = null;
 
     #[ORM\Column]
     private ?bool $approved = null;
@@ -91,12 +92,12 @@ class Request
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(DateTimeInterface $date): static
     {
         $this->date = $date;
 
@@ -113,5 +114,10 @@ class Request
         $this->approved = $approved;
 
         return $this;
+    }
+
+    public function getAttendeesCount(): int
+    {
+        return $this->attendees->count();
     }
 }

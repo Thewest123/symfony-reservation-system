@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Moje žádosti
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Moje žádosti</h1>
+        <div class="page-header__actions">
+            <a
+                    href="{{ path('requests_create') }}"
+                    class=" button button--primary"
+            >Vytvořit</a
+            >
+        </div>
+    </div>
+
+    <section>
+        <h2>Schválené žádosti</h2>
+
+        <table class="approved-requests">
+            <thead>
+            <th scope="col">Místnost</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Obsazenost</th>
+            <th scope="col">Akce</th>
+            </thead>
+            <tbody>
+            {% for req in approved_requests %}
+                <tr aria-rowindex="{{ req.getId() }}">
+                    <th scope="row">{{ req.getRoom().getName() }}</th>
+                    <td>{{ req.getDate() is empty ? "Neurčeno" : req.getDate()|date("d. m. Y", "Europe/Prague") }}</td>
+                    <td>{{ req.getAttendeesCount() }}</td>
+                    <td>
+                        <a
+                                href="{{ path('requests_edit', {id: req.getId()}) }}"
+                                class="button button--success"
+                        >Upravit</a
+                        >
+                        <a
+                                href="{{ path('requests_delete', {id: req.getId()}) }}"
+                                class="button button--black"
+                        >Zrušit rezervaci</a
+                        >
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Čekající žádosti</h2>
+
+        <table>
+            <thead>
+            <th scope="col">Místnost</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Obsazenost</th>
+            <th scope="col">Akce</th>
+            </thead>
+            <tbody>
+            {% for req in awaiting_requests %}
+                <tr aria-rowindex="{{ req.getId() }}">
+                    <th scope="row">{{ req.getRoom().getName() }}</th>
+                    <td>{{ req.getDate() is empty ? "Neurčeno" : req.getDate()|date("d. m. Y", "Europe/Prague") }}</td>
+                    <td>{{ req.getAttendeesCount() }}</td>
+                    <td>
+                        <a
+                                href="{{ path('requests_edit', {id: req.getId()}) }}"
+                                class="button button--primary"
+                        >Upravit</a
+                        >
+                        <a
+                                href="{{ path('requests_delete', {id: req.getId()}) }}"
+                                class="button button--black"
+                        >Odstranit žádost</a
+                        >
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}
