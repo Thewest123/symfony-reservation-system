@@ -1,0 +1,61 @@
+table {
+    border-spacing: 0;
+    border-collapse: separate;
+    width: 100%;
+
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+}
+
+th, td {
+    text-align: left;
+    padding: 0.75rem;
+
+    // Pus right column (action buttons) to the right
+    &:last-child {
+        text-align: right;
+    }
+}
+
+th {
+    background-color: $primary-500;
+    color: $white;
+
+    &:first-child {
+        border-top-left-radius: $border-radius;
+    }
+
+    &:last-child {
+        border-top-right-radius: $border-radius;
+    }
+}
+
+th[scope="row"] {
+    background-color: inherit;
+    color: inherit;
+}
+
+tr:nth-child(odd) {
+    background-color: $gray-200;
+}
+
+tr:nth-child(even) {
+    background-color: $gray-100;
+}
+
+tr:hover {
+    background-color: $gray-300;
+}
+
+table.approved-requests {
+
+    th {
+        background-color: $success-500;
+    }
+
+    th[scope="row"] {
+        background-color: inherit;
+        color: inherit;
+    }
+}

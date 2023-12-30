@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="cs">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="../public/styles/main.css"
+        />
+        <title>Uživatelé | Rezervační systém</title>
+    </head>
+    <body>
+        <!-- Aside navigation -->
+        <aside class="menu">
+            <!-- User info -->
+            <div class="menu-user">
+                <img
+                    src="https://api.dicebear.com/7.x/personas/svg?seed=Sammy&backgroundType=solid,gradientLinear&body=checkered&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf"
+                    alt="User avatar"
+                    class="menu-user__avatar"
+                />
+                <span class="menu-user__name">Jan Novák</span>
+                <span class="menu-user__role">Administrátor</span>
+            </div>
+
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-home"></i> Novinky</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-graduation-cap"></i> Místnosti</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-pen-to-square"></i> Moje žádosti</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-solid fa-user-group"></i> Skupiny</a>
+                    </li>
+                    <li class="active">
+                        <a href="#"><i class="fa-solid fa-user"></i> Uživatelé</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <a
+                href="#"
+                class="menu__logout"
+                >Odhlásit se</a
+            >
+        </aside>
+
+        <!-- Main content -->
+        <main class="content">
+            <div class="page-header">
+                <h1>Uživatelé</h1>
+                <div class="page-header__actions">
+                    <a
+                        href="#"
+                        class="button button--primary"
+                        >Vytvořit</a
+                    >
+                    <!-- <a
+                        href="#"
+                        class="button button--black"
+                        >Todo</a
+                    > -->
+                </div>
+            </div>
+
+            <section>
+                <h2>Běžní uživatelé</h2>
+                <table>
+                    <thead>
+                        <th scope="col">Jméno</th>
+                        <th scope="col">Akce</th>
+                    </thead>
+                    <tbody>
+                        <tr aria-rowindex="1">
+                            <th scope="row">Jan Novák</th>
+                            <td>
+                                <a
+                                    href="#"
+                                    class="button button--primary"
+                                    >Upravit</a
+                                >
+                                <a
+                                    href="#"
+                                    class="button button--black"
+                                    >Odstranit</a
+                                >
+                            </td>
+                        </tr>
+                        <tr aria-rowindex="2">
+                            <th scope="row">Pavel Novotný</th>
+                            <td>
+                                <a
+                                    href="#"
+                                    class="button button--primary"
+                                    >Upravit</a
+                                >
+                                <a
+                                    href="#"
+                                    class="button button--black"
+                                    >Odstranit</a
+                                >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h2>Správci</h2>
+                <table>
+                    <thead>
+                        <th scope="col">Jméno</th>
+                        <th scope="col">Ve skupinách</th>
+                        <th scope="col">Spravuje místností</th>
+                        <th scope="col">Akce</th>
+                    </thead>
+                    <tbody>
+                        <tr aria-rowindex="1">
+                            <th scope="row">Jan Novák</th>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>
+                                <a
+                                    href="#"
+                                    class="button button--primary"
+                                    >Upravit</a
+                                >
+                                <a
+                                    href="#"
+                                    class="button button--black"
+                                    >Odstranit</a
+                                >
+                            </td>
+                        </tr>
+                        <tr aria-rowindex="2">
+                            <th scope="row">Pavel Novotný</th>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>
+                                <a
+                                    href="#"
+                                    class="button button--primary"
+                                    >Upravit</a
+                                >
+                                <a
+                                    href="#"
+                                    class="button button--black"
+                                    >Odstranit</a
+                                >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <h2>Administrátoři</h2>
+                <table>
+                    <thead>
+                        <th scope="col">Jméno</th>
+                        <th scope="col">Ve skupinách</th>
+                        <th scope="col">Spravuje místností</th>
+                        <th scope="col">Akce</th>
+                    </thead>
+                    <tbody>
+                        <tr aria-rowindex="1">
+                            <th scope="row">Jan Novák</th>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>
+                                <a
+                                    href="#"
+                                    class="button button--primary"
+                                    >Upravit</a
+                                >
+                                <a
+                                    href="#"
+                                    class="button button--black"
+                                    >Odstranit</a
+                                >
+                            </td>
+                        </tr>
+                        <tr aria-rowindex="2">
+                            <th scope="row">Pavel Novotný</th>
+                            <td>1</td>
+                            <td>3</td>
+                            <td>
+                                <a
+                                    href="#"
+                                    class="button button--primary"
+                                    >Upravit</a
+                                >
+                                <a
+                                    href="#"
+                                    class="button button--black"
+                                    >Odstranit</a
+                                >
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </body>
+</html>

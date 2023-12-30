@@ -34,3 +34,15 @@
     border-color: $black;
     color: $white;
 }
+
+.button--success {
+    background-color: $success-500;
+    border: 1px solid $success-500;
+    color: $white;
+}
+
+.button--success:hover {
+    background-color: $success-700;
+    border-color: $success-700;
+    color: $white;
+}
