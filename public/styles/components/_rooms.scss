@@ -6,9 +6,10 @@
         &__card {
         padding: 2rem;
         padding-bottom: 1rem;
-        border: 1px solid $gray-400;
+        border: 1px solid $color-border;
         border-radius: $border-radius;
         box-shadow: $card-shadow;
+        background-color: $color-foreground;
         transition: background-color 0.1s ease-in-out;
         display: flex;
         flex-direction: column;
@@ -33,7 +34,7 @@
         }
 
         &:hover {
-            background-color: $gray-200;
+            background-color: $gray-50;
         }
     }
 }
