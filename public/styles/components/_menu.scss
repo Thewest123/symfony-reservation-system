@@ -3,7 +3,7 @@
     min-height: 100vh;
     flex-direction: column;
     border-right: 1px solid $color-border;
-    background-color: $gray-50;
+    background-color: $color-foreground;
 
     // Navigation
     nav {
@@ -23,6 +23,10 @@
 
             &.active {
                 background-color: $gray-300;
+
+                a:hover {
+                    background-color: $gray-300;
+                }
             }
         }
 
@@ -30,6 +34,7 @@
             padding: 1rem 1rem;
             display: block;
             text-decoration: none;
+            font-weight: 600;
             color: $primary-500;
 
             i {

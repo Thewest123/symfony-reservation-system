@@ -26,9 +26,12 @@ $red-800: #c62828;
 $red-900: #b71c1c;
 
 
-$color-border: #ccc;
 $white: #fff;
 $black: #000;
+
+$color-border: #ccc;
+$color-background: $gray-50;
+$color-foreground: $white;
 
 $border-radius: 0.5rem;
 $card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
