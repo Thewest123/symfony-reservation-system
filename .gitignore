@@ -1,6 +1,7 @@
 
 ###> symfony/framework-bundle ###
 /.env.local
+/.env
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
@@ -58,7 +59,7 @@
 .idea/jarRepositories.xml
 .idea/modules.xml
 .idea/*.iml
-.idea/modules
+.idea/*
 *.iml
 *.ipr
 

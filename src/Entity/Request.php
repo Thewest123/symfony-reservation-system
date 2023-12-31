@@ -21,18 +21,18 @@ class Request
     #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'requests')]
-    private Collection $attendees;
-
     #[ORM\ManyToOne(inversedBy: 'requests')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Room $room = null;
+    private ?Room $requestedRoom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?DateTimeInterface $date = null;
 
     #[ORM\Column]
     private ?bool $approved = null;
+
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'requests')]
+    private Collection $attendees;
 
     public function __construct()
     {
@@ -80,14 +80,14 @@ class Request
         return $this;
     }
 
-    public function getRoom(): ?Room
+    public function getRequestedRoom(): ?Room
     {
-        return $this->room;
+        return $this->requestedRoom;
     }
 
-    public function setRoom(?Room $room): static
+    public function setRequestedRoom(?Room $requestedRoom): static
     {
-        $this->room = $room;
+        $this->requestedRoom = $requestedRoom;
 
         return $this;
     }
