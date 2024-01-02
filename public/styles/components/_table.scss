@@ -37,15 +37,15 @@ th[scope="row"] {
 }
 
 tr:nth-child(odd) {
-    background-color: $gray-200;
+    background-color: $white;
 }
 
 tr:nth-child(even) {
-    background-color: $gray-100;
+    background-color: $gray-50;
 }
 
 tr:hover {
-    background-color: $gray-300;
+    background-color: $gray-100;
 }
 
 table.approved-requests {

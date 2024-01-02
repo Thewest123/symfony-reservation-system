@@ -21,15 +21,21 @@
 
         <table class="approved-requests">
             <thead>
-            <th scope="col">Místnost</th>
-            <th scope="col">Datum</th>
-            <th scope="col">Obsazenost</th>
-            <th scope="col">Akce</th>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Místnost</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Počet uživatelů</th>
+                <th scope="col">Akce</th>
+            </tr>
             </thead>
             <tbody>
             {% for req in approved_requests %}
                 <tr aria-rowindex="{{ req.getId() }}">
-                    <th scope="row">{{ req.getRoom().getName() }}</th>
+                    <th scope="row"><a
+                                href="{{ path('requests_detail', {id: req.getId()}) }}">Žádost {{ req.getId() }}</a>
+                    </th>
+                    <th scope="row">{{ req.getRequestedRoom().getName() }}</th>
                     <td>{{ req.getDate() is empty ? "Neurčeno" : req.getDate()|date("d. m. Y", "Europe/Prague") }}</td>
                     <td>{{ req.getAttendeesCount() }}</td>
                     <td>
@@ -55,15 +61,21 @@
 
         <table>
             <thead>
-            <th scope="col">Místnost</th>
-            <th scope="col">Datum</th>
-            <th scope="col">Obsazenost</th>
-            <th scope="col">Akce</th>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Místnost</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Počet uživatelů</th>
+                <th scope="col">Akce</th>
+            </tr>
             </thead>
             <tbody>
             {% for req in awaiting_requests %}
                 <tr aria-rowindex="{{ req.getId() }}">
-                    <th scope="row">{{ req.getRoom().getName() }}</th>
+                    <th scope="row"><a
+                                href="{{ path('requests_detail', {id: req.getId()}) }}">Žádost {{ req.getId() }}</a>
+                    </th>
+                    <th scope="row">{{ req.getRequestedRoom().getName() }}</th>
                     <td>{{ req.getDate() is empty ? "Neurčeno" : req.getDate()|date("d. m. Y", "Europe/Prague") }}</td>
                     <td>{{ req.getAttendeesCount() }}</td>
                     <td>

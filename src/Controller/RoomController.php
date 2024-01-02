@@ -28,7 +28,9 @@ class RoomController extends AbstractController
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(Request $request, int $id): Response
     {
-
+        return $this->render('rooms/detail.html.twig', [
+            'room' => $this->roomRepository->find($id),
+        ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'])]

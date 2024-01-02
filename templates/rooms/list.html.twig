@@ -20,12 +20,12 @@
         <div class="rooms">
             {% for room in my_rooms %}
                 <article class="rooms__card">
-                    <h3>{{ room.getName() }}</h3>
-                    <span class="subtitle">Spravuje {% if room.getManager() is not null %}<a
-                            href="{{ path('users_detail', {id: room.getManager().getId()}) }}">{{ room.getManager().getName() }}</a> {% endif %}{% if room.getOwnerGroup() is not null %}
+                    <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
+                    <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
+                            href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
                             , <a
-                                href="{{ path('groups_detail', {id: room.getOwnerGroup().getId()}) }}">
-                            Skupina {{ room.getOwnerGroup().getId() }}</a>{% endif %}</span>
+                                href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
+                            Skupina {{ room.getBelongsTo().getId() }}</a>{% endif %}</span>
                     <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
                     {#                <p> #}
                     {#                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum voluptates. #}
@@ -48,12 +48,12 @@
         <div class="rooms">
             {% for room in managed_rooms %}
                 <article class="rooms__card">
-                    <h3>{{ room.getName() }}</h3>
-                    <span class="subtitle">Spravuje {% if room.getManager() is not null %}<a
-                            href="{{ path('users_detail', {id: room.getManager().getId()}) }}">{{ room.getManager().getName() }}</a> {% endif %}{% if room.getOwnerGroup() is not null %}
+                    <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
+                    <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
+                            href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
                             , <a
-                                href="{{ path('groups_detail', {id: room.getOwnerGroup().getId()}) }}">
-                            Skupina {{ room.getOwnerGroup().getId() }}</a>{% endif %}</span>
+                                href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
+                            Skupina {{ room.getBelongsTo().getId() }}</a>{% endif %}</span>
                     <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
                     {#                <p> #}
                     {#                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum voluptates. #}

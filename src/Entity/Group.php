@@ -177,4 +177,9 @@ class Group
     {
         return $this->users->count();
     }
+
+    public function getSubgroupsCount(): int
+    {
+        return $this->subgroups->count();
+    }
 }

@@ -26,7 +26,9 @@ class GroupController extends AbstractController
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(Request $request, int $id): Response
     {
-
+        return $this->render('groups/detail.html.twig', [
+            'group' => $this->groupRepository->find($id),
+        ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'])]
