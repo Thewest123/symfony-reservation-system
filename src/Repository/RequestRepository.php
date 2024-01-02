@@ -16,9 +16,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class RequestRepository extends ServiceEntityRepository
 {
+    use SaveRemoveTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Request::class);
+
+        $this->setEntityRepository($this);
     }
 
 //    /**
