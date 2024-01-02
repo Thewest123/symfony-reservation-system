@@ -91,9 +91,9 @@
                         </th>
                         <td>
                             <a
-                                    href="{{ path('groups_edit', {id: sub.getId()}) }}"
+                                    href="{{ path('groups_remove-subgroup', {id: group.getId(), subId: sub.getId()}) }}"
                                     class="button button--primary"
-                            >Upravit</a
+                            >Odebrat</a
                             >
                         </td>
                     </tr>
@@ -125,9 +125,9 @@
                         </th>
                         <td>
                             <a
-                                    href="{{ path('rooms_edit', {id: room.getId()}) }}"
+                                    href="{{ path('groups_remove-room', {id: group.getId(), roomId: room.getId()}) }}"
                                     class="button button--primary"
-                            >Upravit</a>
+                            >Odebrat</a>
                         </td>
                     </tr>
                 {% endfor %}

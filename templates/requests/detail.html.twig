@@ -103,6 +103,11 @@
                                     class="button button--primary"
                             >Upravit</a
                             >
+                            <a
+                                    href="{{ path('requests_remove-occupant', {id: req.getId(), attendeeId: att.getId()}) }}"
+                                    class="button button--primary"
+                            >Odebrat</a
+                            >
                         </td>
                     </tr>
                 {% endfor %}

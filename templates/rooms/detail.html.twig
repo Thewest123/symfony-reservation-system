@@ -109,6 +109,11 @@
                                     class="button button--primary"
                             >Upravit</a
                             >
+                            <a
+                                    href="{{ path('rooms_remove-occupant', {id: room.getId(), occupantId: occupant.getId()}) }}"
+                                    class="button button--primary"
+                            >Odebrat</a
+                            >
                         </td>
                     </tr>
                 {% endfor %}

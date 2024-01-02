@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Vyberte skupinu pro {{ user.getName() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Vyberte skupinu pro {{ user.getName() }}</h1>
+    </div>
+
+    <section>
+        {{ form(form) }}
+    </section>
+{% endblock %}

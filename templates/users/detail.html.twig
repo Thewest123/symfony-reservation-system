@@ -66,6 +66,7 @@
 
     <section>
         <h2>Skupiny uživatele</h2>
+        <a href="{{ path('users_add-group', {id: user.getId()}) }}">Přidat novou</a>
         {% if user.getGroups() is not empty %}
             <table>
                 <thead>
@@ -99,9 +100,9 @@
                             >Upravit</a
                             >
                             <a
-                                    href="{{ path('groups_delete', {id: group.getId()}) }}"
+                                    href="{{ path('users_remove-group', {id: user.getId(), groupId: group.getId()}) }}"
                                     class="button button--black"
-                            >Odstranit</a
+                            >Odebrat</a
                             >
                         </td>
                     </tr>
@@ -144,9 +145,9 @@
                             >Upravit</a
                             >
                             <a
-                                    href="{{ path('groups_delete', {id: group.getId()}) }}"
+                                    href="{{ path('users_remove-managed-group', {id: user.getId(), groupId: group.getId()}) }}"
                                     class="button button--black"
-                            >Odstranit</a
+                            >Odebrat</a
                             >
                         </td>
                     </tr>
@@ -175,7 +176,7 @@
                 {% for room in user.getManagedRooms() %}
                     <tr aria-rowindex="{{ room.getId() }}">
                         <th scope="row"><a
-                                    href="{{ path('rooms_edit', {id: room.getId()}) }}">{{ room.getName() }}</a>
+                                    href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a>
                         </th>
                         <td>{% if room.getBelongsTo() is null %}-{% else %}<a
                                 href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">{{ room.getBelongsTo().getName() }}</a>{% endif %}
@@ -192,14 +193,14 @@
                         </td>
                         <td>
                             <a
-                                    href="{{ path('rooms_edit', {id: room.getId()}) }}"
+                                    href="{{ path('rooms_detail', {id: room.getId()}) }}"
                                     class="button button--primary"
                             >Upravit</a
                             >
                             <a
-                                    href="{{ path('rooms_delete', {id: room.getId()}) }}"
+                                    href="{{ path('users_remove-managed-room', {id: user.getId(), roomId: room.getId()}) }}"
                                     class="button button--black"
-                            >Odstranit</a
+                            >Odebrat</a
                             >
                         </td>
                     </tr>
