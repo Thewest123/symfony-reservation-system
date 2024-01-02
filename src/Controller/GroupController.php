@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Group;
+use App\Form\DeleteType;
 use App\Repository\GroupRepository;
 use App\Repository\RoomRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,7 +50,34 @@ class GroupController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, int $id): Response
     {
+        $entity = $this->findOrFail($id);
 
+        $form = $this->createForm(DeleteType::class, [], [
+            'entity' => 'request'
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->groupRepository->remove($entity, true);
+
+            $this->addFlash('success', "Group was deleted");
+            return $this->redirectToRoute('groups_list');
+        }
+
+        return $this->render('groups/delete.html.twig', [
+            'form' => $form->createView(),
+            'entity' => $entity,
+        ]);
+    }
+
+    private function findOrFail(int $id): Group
+    {
+        $group = $this->groupRepository->find($id);
+        if ($group === null) {
+            throw $this->createNotFoundException();
+        }
+
+        return $group;
     }
 
     #[Route('/{id}/remove-subgroup/{subId}', name: 'remove-subgroup', requirements: ['id' => '\d+', 'subId' => '\d+'])]

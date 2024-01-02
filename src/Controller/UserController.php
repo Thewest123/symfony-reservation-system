@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Forms\AddUserToGroupType;
 use App\Repository\GroupRepository;
 use App\Repository\RoomRepository;
+use App\Entity\User;
+use App\Form\DeleteType;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +58,35 @@ class UserController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, int $id): Response
     {
+        $entity = $this->findOrFail($id);
 
+        $form = $this->createForm(DeleteType::class, [], [
+            'entity' => 'request'
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->userRepository->remove($entity, true);
+
+            $this->addFlash('success', "User was deleted");
+            return $this->redirectToRoute('users_list');
+        }
+
+        return $this->render('users/delete.html.twig', [
+            'form' => $form->createView(),
+            'entity' => $entity,
+        ]);
+
+    }
+
+    private function findOrFail(int $id): User
+    {
+        $user = $this->userRepository->find($id);
+        if ($user === null) {
+            throw $this->createNotFoundException();
+        }
+
+        return $user;
     }
 
     #[Route('/{id}/remove-group/{groupId}', name: 'remove-group', requirements: ['id' => '\d+', 'groupId' => '\d+'])]

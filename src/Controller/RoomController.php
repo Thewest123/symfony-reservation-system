@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Room;
+use App\Form\DeleteType;
 use App\Repository\RoomRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,7 +52,34 @@ class RoomController extends AbstractController
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, int $id): Response
     {
+        $entity = $this->findOrFail($id);
 
+        $form = $this->createForm(DeleteType::class, [], [
+            'entity' => 'room'
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->roomRepository->remove($entity, true);
+
+            $this->addFlash('success', "Room was deleted");
+            return $this->redirectToRoute('rooms_list');
+        }
+
+        return $this->render('rooms/delete.html.twig', [
+            'form' => $form->createView(),
+            'entity' => $entity,
+        ]);
+    }
+
+    private function findOrFail(int $id): Room
+    {
+        $user = $this->roomRepository->find($id);
+        if ($user === null) {
+            throw $this->createNotFoundException();
+        }
+
+        return $user;
     }
 
     #[Route('/{id}/remove-occupant/{occupantId}', name: 'remove-occupant', requirements: ['id' => '\d+', 'occupantId' => '\d+'])]
