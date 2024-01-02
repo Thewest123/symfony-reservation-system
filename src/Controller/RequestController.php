@@ -28,7 +28,9 @@ class RequestController extends AbstractController
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(Request $request, int $id): Response
     {
-
+        return $this->render('requests/detail.html.twig', [
+            'req' => $this->requestRepository->find($id),
+        ]);
     }
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'])]

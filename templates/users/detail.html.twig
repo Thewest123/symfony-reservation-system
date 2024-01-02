@@ -1,0 +1,215 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ user.getName() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ user.getName() }}</h1>
+        <div class="page-header__actions">
+            <a
+                    href="{{ path('users_edit', {id: user.getId()}) }}"
+                    class="button button--primary"
+            >Upravit</a>
+            <a
+                    href="{{ path('users_delete', {id: user.getId()}) }}"
+                    class="button button--black"
+            >Odstranit</a>
+        </div>
+    </div>
+
+    <section>
+        <h2>Informace</h2>
+        <dl>
+            <div class="definition-card">
+                <dt>Jméno</dt>
+                <dd>{{ user.getName() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Uživatelské jméno</dt>
+                <dd>{{ user.getUsername() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Role</dt>
+                {% for role in user.getRoles() %}
+                    <dd>{{ role }}</dd>
+                {% endfor %}
+            </div>
+
+
+            <div class="definition-card">
+                <dt>Počet skupin</dt>
+                <dd>
+                    {{ user.getGroupsCount() }}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet spravovaných místností</dt>
+                <dd>
+                    {{ user.getManagedRoomsCount() }}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet spravovaných skupin</dt>
+                <dd>
+                    {{ user.getManagedGroupsCount() }}
+                </dd>
+            </div>
+
+        </dl>
+    </section>
+
+    <section>
+        <h2>Skupiny uživatele</h2>
+        {% if user.getGroups() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Název</th>
+                    <th scope="col">Správce</th>
+                    <th scope="col">Nadřazená skupina</th>
+                    <th scope="col">Počet místností</th>
+                    <th scope="col">Počet uživatelů</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for group in user.getGroups() %}
+                    <tr aria-rowindex="{{ group.getId() }}">
+                        <th scope="row"><a
+                                    href="{{ path('groups_detail', {id: group.getId()}) }}">{{ group.getName() }}</a>
+                        </th>
+                        <td>{% if group.getGroupManager() is null %}-{% else %}
+                                <a href="{{ path('users_detail', {id: group.getGroupManager().getId()}) }}">{{ group.getGroupManager().getName() }}</a>{% endif %}
+                        </td>
+                        <td>{% if group.getParent() is null %}-{% else %}<a
+                                href="{{ path('groups_detail', {id: group.getParent().getId()}) }}">{{ group.getParent().getName() }}</a>{% endif %}
+                        </td>
+                        <td>{{ group.getRoomsCount() }}</td>
+                        <td>{{ group.getUsersCount() }}</td>
+                        <td>
+                            <a
+                                    href="{{ path('groups_edit', {id: group.getId()}) }}"
+                                    class="button button--primary"
+                            >Upravit</a
+                            >
+                            <a
+                                    href="{{ path('groups_delete', {id: group.getId()}) }}"
+                                    class="button button--black"
+                            >Odstranit</a
+                            >
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Uživatel se nenachází v žádných skupinách.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Spravované skupiny</h2>
+        {% if user.getManagedGroups() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Název</th>
+                    <th scope="col">Nadřazená skupina</th>
+                    <th scope="col">Počet místností</th>
+                    <th scope="col">Počet uživatelů</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for group in user.getManagedGroups() %}
+                    <tr aria-rowindex="{{ group.getId() }}">
+                        <th scope="row"><a
+                                    href="{{ path('groups_detail', {id: group.getId()}) }}">{{ group.getName() }}</a>
+                        </th>
+                        <td>{% if group.getParent() is null %}-{% else %}<a
+                                href="{{ path('groups_detail', {id: group.getParent().getId()}) }}">{{ group.getParent().getName() }}</a>{% endif %}
+                        </td>
+                        <td>{{ group.getRoomsCount() }}</td>
+                        <td>{{ group.getUsersCount() }}</td>
+                        <td>
+                            <a
+                                    href="{{ path('groups_edit', {id: group.getId()}) }}"
+                                    class="button button--primary"
+                            >Upravit</a
+                            >
+                            <a
+                                    href="{{ path('groups_delete', {id: group.getId()}) }}"
+                                    class="button button--black"
+                            >Odstranit</a
+                            >
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Uživatel není správcem žádné skupiny.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Spravované místnosti</h2>
+        {% if user.getManagedRooms() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Název</th>
+                    <th scope="col">Vlastnící skupina</th>
+                    <th scope="col">Budova</th>
+                    <th scope="col">Přístupnost</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for room in user.getManagedRooms() %}
+                    <tr aria-rowindex="{{ room.getId() }}">
+                        <th scope="row"><a
+                                    href="{{ path('rooms_edit', {id: room.getId()}) }}">{{ room.getName() }}</a>
+                        </th>
+                        <td>{% if room.getBelongsTo() is null %}-{% else %}<a
+                                href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">{{ room.getBelongsTo().getName() }}</a>{% endif %}
+                        </td>
+                        <td>{% if room.getBuilding() is null %}-{% else %}<a
+                                href="{{ path('buildings_detail', {id: room.getBuilding().getId()}) }}">{{ room.getBuilding().getName() }}</a>{% endif %}
+                        </td>
+                        <td>
+                            {% if room.isIsPrivate() %}
+                                Soukromá
+                            {% else %}
+                                Veřejná
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a
+                                    href="{{ path('rooms_edit', {id: room.getId()}) }}"
+                                    class="button button--primary"
+                            >Upravit</a
+                            >
+                            <a
+                                    href="{{ path('rooms_delete', {id: room.getId()}) }}"
+                                    class="button button--black"
+                            >Odstranit</a
+                            >
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Uživatel není správcem žádné skupiny.</p>
+        {% endif %}
+    </section>
+
+
+{% endblock %}
