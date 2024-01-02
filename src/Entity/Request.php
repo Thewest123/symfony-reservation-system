@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\RequestRepository;
 use DateTimeInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -26,6 +27,7 @@ class Request
     private ?Room $requestedRoom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan('+0 hours')]
     private ?DateTimeInterface $date = null;
 
     #[ORM\Column]
@@ -37,6 +39,10 @@ class Request
     public function __construct()
     {
         $this->attendees = new ArrayCollection();
+    }
+
+    public function __toString() {
+        return $this->requestedRoom->getName()." ".$this->date;
     }
 
     public function getId(): ?int
