@@ -7,12 +7,9 @@ use App\Entity\Request as Req;
 use App\Form\RequestType;
 use App\Form\DeleteType;
 use App\Repository\RequestRepository;
-<<<<<<< HEAD
 use App\Repository\UserRepository;
-=======
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
->>>>>>> 5bbe4ff (Controllers load templates)
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
@@ -40,7 +37,6 @@ class RequestController extends AbstractController
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(Request $request, int $id): Response
     {
-<<<<<<< HEAD
         $req = $this->requestRepository->find($id);
         if ($req === null) {
             throw $this->createNotFoundException('Žádost s ID ' . $id . 'nenalezena!');
@@ -49,8 +45,6 @@ class RequestController extends AbstractController
         return $this->render('requests/detail.html.twig', [
             'req' => $req,
         ]);
-=======
->>>>>>> 5bbe4ff (Controllers load templates)
     }
 
     #[Route('/{id}/edit', name: 'edit', requirements: ['id' => '\d+'])]
