@@ -2,6 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Group;
+use App\Form\DeleteType;
+use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use App\Repository\RoomRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,6 +28,14 @@ class GroupController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/subgroups', name: 'subgroups')]
+    public function subgroups(Request $request, int $id): Response
+    {
+        return $this->render('groups/subgroups.html.twig', [
+            'groups' => $this->groupRepository->findRecursive($id),
+        ]);
+    }
+
     #[Route('/{id}', name: 'detail', requirements: ['id' => '\d+'])]
     public function detail(Request $request, int $id): Response
     {
@@ -42,13 +53,60 @@ class GroupController extends AbstractController
     #[Route('/create', name: 'create', defaults: ['id' => null])]
     public function edit(Request $request, ?int $id): Response
     {
+        #$group = ($id !== null) ? $this->findOrFail($id) : new Group();
+        if ($id !== null) {
+            $group = $this->findOrFail($id);
+        } else {
+            $group = new Group();
+            $group->setGroupManager($this->getUser());
+        }
 
+        // get available groups
+        $user = $this->getUser();
+        $groups = array_merge($user->getManagedGroups()->toArray(), $user->getGroups()->toArray());
+        $subgroups = [];
+        foreach($groups as $key => $subgroup) {
+            $subgroups = array_merge($subgroups, $this->groupRepository->findRecursive($subgroup->getId()));
+        }
+        $subgroups = array_unique($subgroups, SORT_REGULAR);
+
+        $form = $this->createForm(GroupType::class, $group, ['groups' => $subgroups]);
+
+        return $this->render('groups/add.html.twig',
+            ['form' => $form->createView(),]);
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, int $id): Response
     {
+        $entity = $this->findOrFail($id);
 
+        $form = $this->createForm(DeleteType::class, [], [
+            'entity' => 'request'
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->groupRepository->remove($entity, true);
+
+            $this->addFlash('success', "Group was deleted");
+            return $this->redirectToRoute('groups_list');
+        }
+
+        return $this->render('groups/delete.html.twig', [
+            'form' => $form->createView(),
+            'entity' => $entity,
+        ]);
+    }
+
+    private function findOrFail(int $id): Group
+    {
+        $group = $this->groupRepository->find($id);
+        if ($group === null) {
+            throw $this->createNotFoundException();
+        }
+
+        return $group;
     }
 
     #[Route('/{id}/remove-subgroup/{subId}', name: 'remove-subgroup', requirements: ['id' => '\d+', 'subId' => '\d+'])]

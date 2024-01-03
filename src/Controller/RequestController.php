@@ -2,9 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Entity\Request as Req;
+use App\Form\RequestType;
+use App\Form\DeleteType;
 use App\Repository\RequestRepository;
 use App\Repository\UserRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,13 +51,50 @@ class RequestController extends AbstractController
     #[Route('/create', name: 'create', defaults: ['id' => null])]
     public function edit(Request $request, ?int $id): Response
     {
+        if ($id !== null) {
+            $request = $this->findOrFail($id);
+        } else {
+            $request = new Req();
+            $request->setAuthor($this->getUser());
+        }
+        $form = $this->createForm(RequestType::class, $request, ['request' => $request]);
 
+        return $this->render('requests/add.html.twig',
+            ['form' => $form->createView(),
+             'request' => $request,]);
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, int $id): Response
     {
+        $entity = $this->findOrFail($id);
 
+        $form = $this->createForm(DeleteType::class, [], [
+            'entity' => 'request'
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->requestRepository->remove($entity, true);
+
+            $this->addFlash('success', "Request was deleted");
+            return $this->redirectToRoute('requests_list');
+        }
+
+        return $this->render('requests/delete.html.twig', [
+            'form' => $form->createView(),
+            'entity' => $entity,
+        ]);
+    }
+
+    private function findOrFail(int $id): Req
+    {
+        $request = $this->requestRepository->find($id);
+        if ($request === null) {
+            throw $this->createNotFoundException();
+        }
+
+        return $request;
     }
 
     #[Route('/{id}/remove-attendee/{attendeeId}', name: 'remove-occupant', requirements: ['id' => '\d+', 'attendeeId' => '\d+'])]
