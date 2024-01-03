@@ -13,8 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoomType extends AbstractType
 {
-    public function __construct(private readonly BuildingRepository $buildingRepository,
-                                )
+    public function __construct(private readonly BuildingRepository $buildingRepository, )
     {
     }
 
@@ -22,25 +21,21 @@ class RoomType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('building_id', EntityType::class, [
+            ->add('building', EntityType::class, [
                 'class' => Building::class,
-                'choices' => $this->buildingRepository->findAll()
+                #'choices' => $this->buildingRepository->findAll()
             ])
-            ->add('room_manager_id', EntityType::class, [
-                'class' => Building::class,
-                'choices' => $options['user']
-            ])
-            ->add('building_id', EntityType::class, [
+            ->add('room_manager', EntityType::class, [
                 'class' => User::class,
-                'choices' => $options['user']->getRooms()
+                #'choices' => $options['user']
             ])
             ->add('is_private', CheckboxType::class);
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    /*public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
             ->setRequired(['user'])
             ->setAllowedTypes('user', User::class);
-    }
+    }*/
 }

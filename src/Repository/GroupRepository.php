@@ -25,6 +25,40 @@ class GroupRepository extends ServiceEntityRepository
         $this->setEntityRepository($this);
     }
 
+    /**
+     * @return Group[] Returns an array of Group objects
+     */
+    public function findRecursive(int $id)
+    {
+        $group = $this->find($id);
+        $groups = [$group];
+        return $this->getSubgroups($groups);
+    }
+
+    /**
+     * @return Group[] Returns an array of Group objects
+     */
+    private function getSubgroups($groups)
+    {
+        // clone the array
+        $newGroups = array_merge($groups);
+
+        // loop over each group in array
+        foreach ($groups as $key => $group) {
+            // loop over each subgroup
+            $subgroups = $group->getSubgroups();
+            foreach ($subgroups as $key2 => $subgroup) {
+                // if subgroup is not in array, get all subgroups
+                if (!in_array($subgroup, $newGroups)) {
+                    array_push($newGroups, $subgroup);
+                    $newGroups = $this->getSubgroups($newGroups);
+                }
+            }
+        }
+
+        return $newGroups;
+    }
+
 //    /**
 //     * @return Group[] Returns an array of Group objects
 //     */

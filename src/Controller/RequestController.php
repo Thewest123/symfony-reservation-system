@@ -57,7 +57,7 @@ class RequestController extends AbstractController
             $request = new Req();
             $request->setAuthor($this->getUser());
         }
-        $form = $this->createForm(RequestType::class, [], ['request' => $request]);
+        $form = $this->createForm(RequestType::class, $request, ['request' => $request]);
 
         return $this->render('requests/add.html.twig',
             ['form' => $form->createView(),

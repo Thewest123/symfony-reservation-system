@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Form\UserType;
 use App\Forms\AddUserToGroupType;
 use App\Repository\GroupRepository;
 use App\Repository\RoomRepository;
@@ -52,7 +53,11 @@ class UserController extends AbstractController
     #[Route('/create', name: 'create', defaults: ['id' => null])]
     public function edit(Request $request, ?int $id): Response
     {
+        $user = ($id !== null) ? $this->findOrFail($id) : new User();
+        $form = $this->createForm(UserType::class, $user);
 
+        return $this->render('users/add.html.twig',
+            ['form' => $form->createView(),]);
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]

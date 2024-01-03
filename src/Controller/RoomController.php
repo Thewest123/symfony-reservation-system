@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Room;
 use App\Form\DeleteType;
+use App\Form\RoomType;
 use App\Repository\RoomRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -46,7 +47,18 @@ class RoomController extends AbstractController
     #[Route('/create', name: 'create', defaults: ['id' => null])]
     public function edit(Request $request, ?int $id): Response
     {
+        if ($id !== null) {
+            $room = $this->findOrFail($id);
+        } else {
+            $room = new Room();
+            $room->setRoomManager($this->getUser());
+        }
 
+        $form = $this->createForm(RoomType::class, $room, []);
+
+        return $this->render('rooms/add.html.twig',
+            ['form' => $form->createView(),
+            'request' => $request,]);
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
