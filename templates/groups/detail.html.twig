@@ -1,0 +1,148 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ group.getName() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ group.getName() }}</h1>
+        <div class="page-header__actions">
+            {% if is_manager %}
+                <a
+                        href="{{ path('groups_edit', {id: group.getId()}) }}"
+                        class="button button--primary"
+                >Upravit</a>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a
+                        href="{{ path('groups_delete', {id: group.getId()}) }}"
+                        class="button button--black"
+                >Odstranit</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <section>
+        <h2>Informace</h2>
+        <dl>
+            <div class="definition-card">
+                <dt>Název</dt>
+                <dd>{{ group.getName() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet místností</dt>
+                <dd>{{ group.getRoomsCount() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet podskupin</dt>
+                <dd>{{ group.getSubgroupsCount() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet uživatelů</dt>
+                <dd>{{ group.getUsersCount() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Správce</dt>
+                <dd>
+                    {% if group.getGroupManager() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('users_detail', {id: group.getGroupManager().getId()}) }}">
+                            {{ group.getGroupManager().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Nadřazená skupina</dt>
+                <dd>
+                    {% if group.getParent() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('groups_detail', {id: group.getParent().getId()}) }}">
+                            {{ group.getParent().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+        </dl>
+    </section>
+
+    <section>
+        <h2>Podskupiny</h2>
+        {% if group.getSubgroups() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Skupina</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sub in group.getSubgroups() %}
+                    <tr aria-rowindex="{{ sub.getId() }}">
+                        <th scope="row">
+                            <a href="{{ path('groups_detail', {id: sub.getId()}) }}">
+                                {{ sub.getName() }}
+                            </a>
+                        </th>
+                        <td>
+                            {% if is_granted('manage', group) %}
+                                <a
+                                        href="{{ path('groups_remove-subgroup', {id: group.getId(), subId: sub.getId()}) }}"
+                                        class="button button--primary"
+                                >Odebrat</a
+                                >
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Tato skupina nemá žádné podskupiny.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Spravované místnosti</h2>
+        {% if group.getRooms() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Název</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for room in group.getRooms() %}
+                    <tr aria-rowindex="{{ room.getId() }}">
+                        <th scope="row">
+                            <a href="{{ path('rooms_detail', {id: room.getId()}) }}">
+                                {{ room.getName() }}
+                            </a>
+                        </th>
+                        <td>
+                            {% if is_granted('manage', group) %}
+                                <a
+                                        href="{{ path('groups_remove-room', {id: group.getId(), roomId: room.getId()}) }}"
+                                        class="button button--primary"
+                                >Odebrat</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Tato skupina nespravuje žádné místnosti.</p>
+        {% endif %}
+    </section>
+{% endblock %}

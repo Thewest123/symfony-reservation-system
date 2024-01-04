@@ -1,0 +1,190 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ room.getName() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ room.getName() }}</h1>
+        <div class="page-header__actions">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a
+                        href="{{ path('rooms_edit', {id: room.getId()}) }}"
+                        class="button button--primary"
+                >Upravit</a>
+                <a
+                        href="{{ path('rooms_delete', {id: room.getId()}) }}"
+                        class="button button--black"
+                >Odstranit</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <section>
+        <h2>Informace</h2>
+        <dl>
+            <div class="definition-card">
+                <dt>Název</dt>
+                <dd>{{ room.getName() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Obsazenost</dt>
+                <dd>{{ room.getOccupantsCount() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Správce</dt>
+                <dd>
+                    {% if room.getRoomManager() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">
+                            {{ room.getRoomManager().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Vlastnící skupina</dt>
+                <dd>
+                    {% if room.getBelongsTo() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
+                            {{ room.getBelongsTo().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Budova</dt>
+                <dd>
+                    {% if room.getBuilding() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('buildings_detail', {id: room.getBuilding().getId()}) }}">
+                            {{ room.getBuilding().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Přístupnost</dt>
+                <dd>
+                    {% if room.getIsPrivate() %}
+                        Soukromá
+                    {% else %}
+                        Veřejná
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Můžete aktuálně vstoupit?</dt>
+                <dd>{{ is_granted('enter', room) ? "Ano" : "Ne" }}</dd>
+            </div>
+
+        </dl>
+    </section>
+
+    <section>
+        <h2>Obsazenost</h2>
+        {% if room.getOccupants() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Uživatel</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for occupant in room.getOccupants() %}
+                    <tr aria-rowindex="{{ occupant.getId() }}">
+                        <th scope="row">
+                            <a href="{{ path('users_detail', {id: occupant.getId()}) }}">
+                                {{ occupant.getName() }}
+                            </a>
+                        </th>
+                        <td>
+                            {% if is_manager %}
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <a
+                                            href="{{ path('users_edit', {id: occupant.getId()}) }}"
+                                            class="button button--primary"
+                                    >Upravit</a
+                                    >
+                                {% endif %}
+                                <a
+                                        href="{{ path('rooms_remove-occupant', {id: room.getId(), occupantId: occupant.getId()}) }}"
+                                        class="button button--primary"
+                                >Odebrat</a
+                                >
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Tato místnost je prázdná.</p>
+        {% endif %}
+    </section>
+
+    {% if is_manager %}
+        <section>
+            <h2>Žádosti</h2>
+            {% if room.getRequests() is not empty %}
+                <table>
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Autor</th>
+                        <th scope="col">Počet uživatelů</th>
+                        <th scope="col">Datum</th>
+                        <th scope="col">Stav</th>
+                        <th scope="col">Akce</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for req in room.getRequests() %}
+                        <tr aria-rowindex="{{ req.getId() }}">
+                            <th scope="row">
+                                <a href="{{ path('requests_detail', {id: req.getId()}) }}">
+                                    {{ req.getId() }}
+                                </a>
+                            </th>
+                            <td>
+                                <a href="{{ path('users_detail', {id: req.getAuthor().getId()}) }}">
+                                    {{ req.getAuthor().getName() }}
+                                </a>
+                            </td>
+                            <td>{{ req.getAttendeesCount() }}</td>
+                            <td>{{ req.getDate()|date('d.m.Y H:i') }}</td>
+                            <td>
+                                {% if req.isApproved() %}
+                                    Schváleno
+                                {% else %}
+                                    Čeká na schválení
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a
+                                        href="{{ path('requests_edit', {id: req.getId()}) }}"
+                                        class="button button--primary"
+                                >Upravit</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Tato místnost nemá žádné žádosti.</p>
+            {% endif %}
+        </section>
+    {% endif %}
+{% endblock %}

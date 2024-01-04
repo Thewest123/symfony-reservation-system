@@ -1,0 +1,23 @@
+// Import Font Awesome from CDN
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css");
+
+// Import modern-normalize
+@import "modern-normalize.css";
+
+// General styles
+@import "variables";
+@import "general";
+
+// Import components
+@import "components/inputs";
+@import "components/button";
+@import "components/menu";
+@import "components/login-form";
+@import "components/rooms";
+@import "components/page-header";
+@import "components/table";
+@import "components/definition-list";
+@import "components/crud-form";
+
+// Import utils
+@import "utils";

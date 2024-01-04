@@ -1,0 +1,40 @@
+.definition-card {
+    padding: 2rem;
+    border: 1px solid $color-border;
+    border-radius: $border-radius;
+    box-shadow: $card-shadow;
+    background-color: $color-foreground;
+    transition: background-color 0.1s ease-in-out;
+    position: relative;
+
+    &:hover {
+        background-color: $gray-50;
+    }
+
+}
+
+dl {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+    gap: 1rem;
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    color: $black;
+    margin: 0;
+    padding: 0;
+}
+
+// Dont set min width on mobile
+@media (max-width: $breakpoint-sm) {
+    dl {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,127 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Žádost {{ req.getId() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Žádost {{ req.getId() }}</h1>
+        <div class="page-header__actions">
+            <a
+                    href="{{ path('requests_edit', {id: req.getId()}) }}"
+                    class="button button--primary"
+            >Upravit</a>
+            <a
+                    href="{{ path('requests_delete', {id: req.getId()}) }}"
+                    class="button button--black"
+            >Odstranit</a>
+        </div>
+    </div>
+
+    <section>
+        <h2>Informace</h2>
+        <dl>
+            <div class="definition-card">
+                <dt>ID</dt>
+                <dd>Žádost {{ req.getId() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet uživatelů</dt>
+                <dd>{{ req.getAttendeesCount() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Autor</dt>
+                <dd>
+                    {% if req.getAuthor() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('users_detail', {id: req.getAuthor().getId()}) }}">
+                            {{ req.getAuthor().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Požadovaná místnost</dt>
+                <dd>
+                    {% if req.getRequestedRoom() is null %}
+                        -
+                    {% else %}
+                        <a href="{{ path('rooms_detail', {id: req.getRequestedRoom().getId()}) }}">
+                            {{ req.getRequestedRoom().getName() }}
+                        </a>
+                    {% endif %}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Datum začátku</dt>
+                <dd>
+                    {{ req.getDate()|date("d. m. Y H:i", "Europe/Prague") }}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Datum konce</dt>
+                <dd>
+                    {{ req.getEndDate()|date("d. m. Y H:i", "Europe/Prague") }}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Stav</dt>
+                <dd>
+                    {% if req.isApproved() %}
+                        Schválená
+                    {% else %}
+                        Čeká na schválení
+                    {% endif %}
+                </dd>
+            </div>
+
+        </dl>
+    </section>
+
+    <section>
+        <h2>Uživatelé</h2>
+        {% if req.getAttendees() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Uživatel</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for att in req.getAttendees() %}
+                    <tr aria-rowindex="{{ att.getId() }}">
+                        <th scope="row">
+                            <a href="{{ path('users_detail', {id: att.getId()}) }}">
+                                {{ att.getName() }}
+                            </a>
+                        </th>
+                        <td>
+                            <a
+                                    href="{{ path('users_edit', {id: att.getId()}) }}"
+                                    class="button button--primary"
+                            >Upravit</a
+                            >
+                            <a
+                                    href="{{ path('requests_remove-occupant', {id: req.getId(), attendeeId: att.getId()}) }}"
+                                    class="button button--primary"
+                            >Odebrat</a
+                            >
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Tato žádost nemá žádné uživatele.</p>
+        {% endif %}
+    </section>
+{% endblock %}

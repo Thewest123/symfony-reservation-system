@@ -1,0 +1,60 @@
+body {
+    display: grid;
+    grid-template-columns: 15rem 1fr;
+    min-height: 100vh;
+}
+
+// Hide menu on small screens
+@media (max-width: $breakpoint-sm) {
+    body {
+        grid-template-columns: 1fr;
+    }
+}
+
+// Empty page (login, register, etc)
+.empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 1rem;
+}
+
+.empty--darker {
+    background-color: $color-background;
+}
+
+// Main content
+.content {
+    padding: 1.5rem;
+    background-color: $color-background;
+    min-height: 100vh;
+
+    h1 {
+        margin: 0;
+    }
+}
+
+a {
+    color: $primary-500;
+    text-decoration: none;
+    font-weight: bolder;
+    transition: color 0.1s ease-in-out;
+
+    &:hover {
+        color: $primary-700;
+    }
+}
+
+// Add solid line between sections
+section > h2 {
+    padding-top: 1rem;
+    margin-top: 2rem;
+    border-top: solid 1px $color-border;
+}
+
+.infoheading {
+    color: $gray-700;
+    display: inline-block;
+    margin-bottom: 1rem;
+}

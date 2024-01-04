@@ -1,0 +1,45 @@
+.login-form {
+    &__title {
+        text-align: center;
+        font-weight: bold;
+        margin-bottom: 2rem;
+    }
+
+    &__content {
+        background-color: $color-foreground;
+        border: 1px solid $color-border;
+        border-radius: $border-radius;
+        box-shadow: $card-shadow;
+        padding: 3rem 2rem;
+        max-width: 35rem;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+
+    &__error {
+        color: $red-500;
+        margin-bottom: 1rem;
+        text-align: center;
+        font-weight: 600;
+    }
+
+    &__links {
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        a {
+            margin: 0.25rem;
+            text-decoration: none;
+            color: $gray-600;
+        }
+
+        a:hover {
+            color: $gray-800;
+        }
+    }
+}

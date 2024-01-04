@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Skupiny
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Skupiny</h1>
+        <div class="page-header__actions">
+            {% if is_granted('ROLE_ADMIN') %}
+                <a
+                        href="{{ path('groups_create') }}"
+                        class="button button--primary"
+                >Vytvořit</a
+                >
+            {% endif %}
+        </div>
+    </div>
+
+    <section>
+        <h2>Seznam skupin</h2>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Název</th>
+                <th scope="col">Správce</th>
+                <th scope="col">Nadřazená skupina</th>
+                <th scope="col">Počet místností</th>
+                <th scope="col">Počet uživatelů</th>
+                <th scope="col">Akce</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for group in groups %}
+                <tr aria-rowindex="{{ group.getId() }}">
+                    <th scope="row"><a href="{{ path('groups_detail', {id: group.getId()}) }}">{{ group.getName() }}</a>
+                    </th>
+                    <td>{% if group.getGroupManager() is null %}-{% else %}
+                            <a href="{{ path('users_detail', {id: group.getGroupManager().getId()}) }}">{{ group.getGroupManager().getName() }}</a>{% endif %}
+                    </td>
+                    <td>{% if group.getParent() is null %}-{% else %}<a
+                            href="{{ path('groups_detail', {id: group.getParent().getId()}) }}">{{ group.getParent().getName() }}</a>{% endif %}
+                    </td>
+                    <td>{{ group.getRoomsCount() }}</td>
+                    <td>{{ group.getUsersCount() }}</td>
+                    <td>
+                        <a
+                                href="{{ path('groups_edit', {id: group.getId()}) }}"
+                                class="button button--primary"
+                        >Upravit</a
+                        >
+                        <a
+                                href="{{ path('groups_delete', {id: group.getId()}) }}"
+                                class="button button--black"
+                        >Odstranit</a
+                        >
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

@@ -1,0 +1,17 @@
+
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>List of subgroups</h1>
+    <ul>
+        {% for group in groups %}
+            <li>
+                name: {{ group.getName() }}
+                <br>
+                <i>parent: {{ group.getParent().getName() }}</i>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+

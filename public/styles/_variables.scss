@@ -1,0 +1,71 @@
+// Colors
+$primary-500: #e91e63;
+$primary-600: #d81b60;
+$primary-700: #c2185b;
+
+$success-50: #EEFCF4;
+$success-100: #D8F8E5;
+$success-200: #A8F0C6;
+$success-300: #6BE69E;
+$success-400: #24D56E;
+$success-500: #20BB60;
+$success-600: #1DAA58;
+$success-700: #19944C;
+$success-800: #167E41;
+$success-900: #0F572D;
+$success-950: #0B4122;
+
+$gray-50: #fafafa;
+$gray-100: #f5f5f5;
+$gray-200: #eeeeee;
+$gray-300: #e0e0e0;
+$gray-400: #bdbdbd;
+$gray-500: #9e9e9e;
+$gray-600: #757575;
+$gray-700: #616161;
+$gray-800: #424242;
+$gray-900: #212121;
+
+$red-100: #ffebee;
+$red-200: #ffcdd2;
+$red-300: #ef9a9a;
+$red-400: #e57373;
+$red-500: #f44336;
+$red-600: #e53935;
+$red-700: #d32f2f;
+$red-800: #c62828;
+$red-900: #b71c1c;
+
+$white: #fff;
+$black: #000;
+
+$color-border: #ccc;
+$color-background: $gray-50;
+$color-foreground: $white;
+
+// Other variables
+$border-radius: 0.5rem;
+$card-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+// Sizes, inspired by Tailwind CSS
+$size-xs: 0.75rem;
+$size-sm: 0.875rem;
+$size-base: 1rem;
+$size-lg: 1.125rem;
+$size-xl: 1.25rem;
+$size-2xl: 1.5rem;
+$size-3xl: 1.875rem;
+$size-4xl: 2.25rem;
+$size-5xl: 3rem;
+$size-6xl: 3.75rem;
+$size-7xl: 4.5rem;
+$size-8xl: 6rem;
+$size-9xl: 8rem;
+
+// Breakpoints
+$breakpoint-xs: 0;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;

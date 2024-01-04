@@ -1,0 +1,51 @@
+{% use "form_div_layout.html.twig" %}
+
+{%- block form_start -%}
+<div class="crud-form">
+    {% set attr = attr|merge({'class': 'edit'}) %}
+    {{ parent() }}
+
+    {%- endblock form_start -%}
+
+    {%- block form_end -%}
+</div>
+{%- endblock form_end -%}
+
+{%- block form_rows -%}
+    <div class="crud-form__content">
+        {{ parent() }}
+    </div>
+{%- endblock form_rows -%}
+
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+
+    <div class="crud-form__row">
+        <div class="crud-form__row__title">
+            {{- form_label(form) -}}
+        </div>
+        <div class="crud-form__row__content">
+            {{- form_widget(form, widget_attr) -}}
+            {{- form_help(form) -}}
+            {{- form_errors(form) -}}
+        </div>
+    </div>
+
+{%- endblock form_row -%}
+
+{%- block button_row -%}
+    {{- form_widget(form, {attr: {'class': 'button button--primary'}}) -}}
+{%- endblock button_row -%}
+
+{%- block form_errors -%}
+    {%- if errors|length > 0 -%}
+        <ul class="crud-form__error">
+            {%- for error in errors -%}
+                <li>{{ error.message }}</li>
+            {%- endfor -%}
+        </ul>
+    {%- endif -%}
+{%- endblock form_errors -%}

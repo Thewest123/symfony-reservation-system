@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Budovy
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>Budovy</h1>
+        <div class="page-header__actions">
+            <a
+                    href="{{ path('buildings_create') }}"
+                    class="button button--primary"
+            >Vytvořit</a
+            >
+        </div>
+    </div>
+
+    <section>
+        <h2>Seznam budov</h2>
+        <table>
+            <thead>
+            <tr>
+                <th scope="col">Název</th>
+                <th scope="col">Počet místností</th>
+                <th scope="col">Akce</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for building in buildings %}
+                <tr aria-rowindex="{{ building.getId() }}">
+                    <th scope="row"><a
+                                href="{{ path('buildings_detail', {id: building.getId()}) }}">{{ building.getName() }}</a>
+                    </th>
+                    <td>{{ building.getRoomsCount() }}</td>
+                    <td>
+                        <a
+                                href="{{ path('buildings_edit', {id: building.getId()}) }}"
+                                class="button button--primary"
+                        >Upravit</a
+                        >
+                        <a
+                                href="{{ path('buildings_delete', {id: building.getId()}) }}"
+                                class="button button--black"
+                        >Odstranit</a
+                        >
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </section>
+{% endblock %}

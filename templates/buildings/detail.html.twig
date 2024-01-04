@@ -1,0 +1,69 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ building.getName() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>{{ building.getName() }}</h1>
+        <div class="page-header__actions">
+            <a
+                    href="{{ path('buildings_edit', {id: building.getId()}) }}"
+                    class="button button--primary"
+            >Upravit</a>
+            <a
+                    href="{{ path('buildings_delete', {id: building.getId()}) }}"
+                    class="button button--black"
+            >Odstranit</a>
+        </div>
+    </div>
+
+    <section>
+        <h2>Informace</h2>
+        <dl>
+            <div class="definition-card">
+                <dt>Název</dt>
+                <dd>{{ building.getName() }}</dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Počet místností</dt>
+                <dd>{{ building.getRoomsCount() }}</dd>
+            </div>
+        </dl>
+    </section>
+
+    <section>
+        <h2>Místnosti</h2>
+        {% if building.getRooms() is not empty %}
+            <table>
+                <thead>
+                <tr>
+                    <th scope="col">Název</th>
+                    <th scope="col">Akce</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for room in building.getRooms() %}
+                    <tr aria-rowindex="{{ room.getId() }}">
+                        <th scope="row">
+                            <a href="{{ path('rooms_detail', {id: room.getId()}) }}">
+                                {{ room.getName() }}
+                            </a>
+                        </th>
+                        <td>
+                            <a
+                                    href="{{ path('buildings_remove-room', {id: building.getId(), roomId: room.getId()}) }}"
+                                    class="button button--primary"
+                            >Odebrat a odstranit</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Tato budova nemá žádné místnosti.</p>
+        {% endif %}
+    </section>
+{% endblock %}
