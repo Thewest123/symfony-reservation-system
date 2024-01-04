@@ -26,13 +26,17 @@
     <!-- User info -->
     <div class="menu-user">
         {% if is_granted('IS_AUTHENTICATED') %}
-            <img
-                    src="https://api.dicebear.com/7.x/personas/svg?seed={{ app.user.username }}&backgroundType=solid,gradientLinear&body=checkered&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf"
-                    alt="User avatar"
-                    class="menu-user__avatar"
-            />
-            <span class="menu-user__name">{{ app.user.username }}</span>
-            <span class="menu-user__role">{{ app.user.roles[0] }}</span>
+            <a href="{{ path('users_detail', {id: app.user.id}) }}">
+                <img
+                        src="https://api.dicebear.com/7.x/personas/svg?seed={{ app.user.username }}124&backgroundType=gradientLinear&eyes=happy,open,wink,glasses,sleep&hair=beanie,bobBangs,bobCut,bunUndercut,cap,curlyBun,curlyHighTop,extraLong,fade,long,mohawk,pigtails,shortCombover,shortComboverChops,sideShave,straightBun&mouth=smile,surprise,smirk&backgroundColor=b6e3f4,c0aede,d1d4f9,ffd5dc,ffdfbf"
+                        alt="User avatar"
+                        class="menu-user__avatar"
+                />
+            </a>
+            <span class="menu-user__name">
+                <a href="{{ path('users_detail', {id: app.user.id}) }}">{{ app.user.name }}</a>
+            </span>
+            <span class="menu-user__role">{{ app.user.username }} | {{ app.user.roles[0] }}</span>
         {% else %}
             <a
                     href="{{ path('app_login') }}"
