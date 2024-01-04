@@ -1,3 +1,11 @@
 controllers:
     resource: ../src/Controller/
     type: attribute
+
+controllers_api:
+    resource: '../src/Api/Controller/'
+    type: attribute
+
+api_login:
+    path: /api/login
+    methods: ['POST']
