@@ -28,13 +28,21 @@ class RequestType extends AbstractType
                     'required' => true,
                 ]
             )
+            ->add(
+                'endDate',
+                DateTimeType::class, [
+                    'widget' => 'single_text',
+                    'input' => 'datetime',
+                    'required' => true,
+                ]
+            )
             ->add('requestedRoom', EntityType::class, [
                 'class' => Room::class,
                 'choices' => $options['allowed_rooms']
             ])
             ->add('attendees', EntityType::class, [
                 'class' => User::class,
-                'choices' => $occupants,
+//                'choices' => $occupants,
                 'multiple' => true,
                 'expanded' => true
             ]);
@@ -43,7 +51,7 @@ class RequestType extends AbstractType
             $builder->add('approved', CheckboxType::class,
                 [
                     'label' => 'Schváleno',
-                    'required' => true,
+                    'required' => false,
                 ]);
 
         $builder->add('submit', SubmitType::class, ['label' => 'Provést']);

@@ -84,6 +84,11 @@
                 </dd>
             </div>
 
+            <div class="definition-card">
+                <dt>Můžete aktuálně vstoupit?</dt>
+                <dd>{{ is_granted('enter', room) ? "Ano" : "Ne" }}</dd>
+            </div>
+
         </dl>
     </section>
 
