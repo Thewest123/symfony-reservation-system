@@ -8,71 +8,87 @@
     <div class="page-header">
         <h1>Místnosti</h1>
         <div class="page-header__actions">
-            <a
-                    href="{{ path('rooms_create') }}"
-                    class="button button--primary"
-            >Vytvořit</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                <a
+                        href="{{ path('rooms_create') }}"
+                        class="button button--primary"
+                >Vytvořit</a>
+            {% endif %}
         </div>
     </div>
-    <section>
-        <h2>Moje místnosti</h2>
-        <span class="infoheading">Místnosti, které si můžete rezervovat</span>
-        <div class="rooms">
-            {% for room in my_rooms %}
-                <article class="rooms__card">
-                    <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
-                    <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
-                            href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
-                            , <a
-                                href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
-                            Skupina {{ room.getBelongsTo().getId() }}</a>{% endif %}</span>
-                    <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
-                    {#                <p> #}
-                    {#                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum voluptates. #}
-                    {#                    Quisquam, voluptatum voluptates. #}
-                    {#                </p> #}
-                    <div class="rooms__card__actions">
-                        <a
-                                href="{{ path('rooms_detail', {id: room.getId()}) }}"
-                                class="button button--primary"
-                        >Rezervovat</a
-                        >
-                    </div>
-                </article>
-            {% endfor %}
-        </div>
-    </section>
-    <section>
-        <h2>Spravované místnosti</h2>
-        <span class="infoheading">Místnosti, ke kterým máte právo správce (přímé nebo ze skupiny)</span>
-        <div class="rooms">
-            {% for room in managed_rooms %}
-                <article class="rooms__card">
-                    <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
-                    <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
-                            href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
-                            , <a
-                                href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
-                            Skupina {{ room.getBelongsTo().getId() }}</a>{% endif %}</span>
-                    <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
-                    {#                <p> #}
-                    {#                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatum voluptates. #}
-                    {#                    Quisquam, voluptatum voluptates. #}
-                    {#                </p> #}
-                    <div class="rooms__card__actions">
-                        <a
-                                href="{{ path('rooms_detail', {id: room.getId()}) }}"
-                                class="button button--primary"
-                        >Rezervovat</a
-                        >
-                        <a
-                                href="{{ path('rooms_edit', {id: room.getId()}) }}"
-                                class="button button--black"
-                        >Upravit</a
-                        >
-                    </div>
-                </article>
-            {% endfor %}
-        </div>
-    </section>
+    {% if not is_granted('IS_AUTHENTICATED') %}
+        <section>
+            <h2>Veřejné místnosti</h2>
+            <span class="infoheading">Místnosti, u kterých můžete zobrazit obsazenost.</span>
+            <div class="rooms">
+                {% for room in public_rooms %}
+                    <article class="rooms__card">
+                        <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
+                        <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
+                                href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
+                                , Skupina <a
+                                    href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
+                                {{ room.getBelongsTo().getName() }}</a>{% endif %}</span>
+                        <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
+                        <div class="rooms__card__actions">
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% else %}
+        <section>
+            <h2>Moje místnosti</h2>
+            <span class="infoheading">Místnosti, které si můžete rezervovat</span>
+            <div class="rooms">
+                {% for room in my_rooms %}
+                    <article class="rooms__card">
+                        <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
+                        <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
+                                href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
+                                , Skupina <a
+                                    href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
+                                {{ room.getBelongsTo().getName() }}</a>{% endif %}</span>
+                        <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
+                        <div class="rooms__card__actions">
+                            <a
+                                    href="{{ path('rooms_detail', {id: room.getId()}) }}"
+                                    class="button button--primary"
+                            >Rezervovat</a
+                            >
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+        <section>
+            <h2>Spravované místnosti</h2>
+            <span class="infoheading">Místnosti, ke kterým máte právo správce (přímé nebo ze skupiny)</span>
+            <div class="rooms">
+                {% for room in managed_rooms %}
+                    <article class="rooms__card">
+                        <h3><a href="{{ path('rooms_detail', {id: room.getId()}) }}">{{ room.getName() }}</a></h3>
+                        <span class="subtitle">Spravuje {% if room.getRoomManager() is not null %}<a
+                                href="{{ path('users_detail', {id: room.getRoomManager().getId()}) }}">{{ room.getRoomManager().getName() }}</a> {% endif %}{% if room.getBelongsTo() is not null %}
+                                , Skupina <a
+                                    href="{{ path('groups_detail', {id: room.getBelongsTo().getId()}) }}">
+                                {{ room.getBelongsTo().getName() }}</a>{% endif %}</span>
+                        <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
+                        <div class="rooms__card__actions">
+                            <a
+                                    href="{{ path('rooms_detail', {id: room.getId()}) }}"
+                                    class="button button--primary"
+                            >Rezervovat</a
+                            >
+                            <a
+                                    href="{{ path('rooms_edit', {id: room.getId()}) }}"
+                                    class="button button--black"
+                            >Upravit</a
+                            >
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
 {% endblock %}

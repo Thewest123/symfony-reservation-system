@@ -8,6 +8,7 @@ use App\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,7 +26,8 @@ class GroupType extends AbstractType
             ->add('parent', EntityType::class, [
                 'class' => Group::class,
                 'choices' => $options['groups']
-            ]);
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Provést']);
     }
     
     public function configureOptions(OptionsResolver $resolver): void

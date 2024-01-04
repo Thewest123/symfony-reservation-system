@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Forms;
+namespace App\Form;
 
 use App\Entity\Group;
 use Doctrine\ORM\EntityRepository;

@@ -28,9 +28,9 @@ security:
             logout:
                 path: app_logout
 
-#            remember_me:
-#                secret: '%kernel.secret%'
-#                lifetime: 604800
+            remember_me:
+                secret: '%kernel.secret%'
+                lifetime: 604800
 #                path: /
 #                always_remember_me: true
                 # where to redirect after logout
@@ -46,6 +46,9 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
+    #access_decision_manager:
+    #    strategy: affirmative
+    #    allow_if_all_abstain: false
 
 when@test:
     security:
