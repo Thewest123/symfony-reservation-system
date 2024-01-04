@@ -331,5 +331,28 @@ dd {
 @media (max-width: 640px) {
   dl {
     grid-template-columns: 1fr; } }
+.crud-form__content {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  row-gap: 1rem;
+  width: 50%; }
+.crud-form__row {
+  width: 100%; }
+  .crud-form__row__title {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    display: block;
+    width: 100%; }
+.crud-form__error {
+  list-style: none;
+  color: #f44336;
+  padding: 0;
+  margin-top: 0.25rem;
+  margin-bottom: 1rem;
+  text-align: left;
+  font-weight: 600; }
 
 /*# sourceMappingURL=main.css.map */
