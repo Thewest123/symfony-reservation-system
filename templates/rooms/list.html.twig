@@ -52,7 +52,7 @@
                         <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
                         <div class="rooms__card__actions">
                             <a
-                                    href="{{ path('rooms_detail', {id: room.getId()}) }}"
+                                    href="{{ path('requests_create', {forRoomId: room.getId()}) }}"
                                     class="button button--primary"
                             >Rezervovat</a
                             >
@@ -76,15 +76,17 @@
                         <span class="subtitle">Obsazeno {{ room.getOccupantsCount() }}</span>
                         <div class="rooms__card__actions">
                             <a
-                                    href="{{ path('rooms_detail', {id: room.getId()}) }}"
+                                    href="{{ path('requests_create', {forRoomId: room.getId()}) }}"
                                     class="button button--primary"
                             >Rezervovat</a
                             >
-                            <a
-                                    href="{{ path('rooms_edit', {id: room.getId()}) }}"
-                                    class="button button--black"
-                            >Upravit</a
-                            >
+                            {% if is_granted('edit', room) %}
+                                <a
+                                        href="{{ path('rooms_edit', {id: room.getId()}) }}"
+                                        class="button button--black"
+                                >Upravit</a
+                                >
+                            {% endif %}
                         </div>
                     </article>
                 {% endfor %}
