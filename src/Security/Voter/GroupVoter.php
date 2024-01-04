@@ -55,7 +55,17 @@ class GroupVoter extends Voter
         if ($this->canEdit($group, $user))
             return true;
 
-        return true;
+        $groups = [$group];
+        while ($group?->getParent() !== null && !in_array($group = $group->getParent(), $groups)) {
+            array_push($groups, $group);
+        }
+
+        // Check if any group allows the user to manage the room
+        foreach ($groups as $key => $group)
+            if ($group?->getUsers()->contains($user))
+                return true;
+
+        return false;
     }
 
     private function canManage(Group $group, User $user): bool
