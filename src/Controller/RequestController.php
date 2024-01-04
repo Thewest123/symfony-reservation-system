@@ -81,6 +81,15 @@ class RequestController extends AbstractController
         } else {
             $req = new Req();
             $req->setAuthor($this->getUser());
+
+            // Pre-set room if in query parameter
+            $forRoomId = $request->query->get('forRoomId') ?? null;
+            if ($forRoomId !== null) {
+                $forRoom = $this->roomRepository->find($forRoomId);
+                if ($forRoom !== null) {
+                    $req->setRequestedRoom($forRoom);
+                }
+            }
         }
         $this->denyAccessUnlessGranted(RequestVoter::EDIT, $req);
 

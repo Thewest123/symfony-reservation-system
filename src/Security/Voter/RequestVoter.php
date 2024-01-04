@@ -59,7 +59,7 @@ class RequestVoter extends Voter
         if ($request->getAttendees()->contains($user))
             return true;
 
-        return true;
+        return false;
     }
 
     private function canManage(Request $request, User $user): bool
