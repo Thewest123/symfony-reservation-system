@@ -63,10 +63,10 @@ class RoomVoter extends Voter
         if ($this->canManage($room, $user))
             return true;
 
-        // TODO
+        if (!$room->getIsPrivate())
+            return true;
 
-        return true;
-        //return false;
+        return $room->getOccupants()->contains($user);
     }
 
     private function canManage(Room $room, User $user): bool
@@ -85,10 +85,12 @@ class RoomVoter extends Voter
         }
 
         // Check if any group allows the user to manage the room
-        foreach ($groups as $key => $group)
+        /*foreach ($groups as $key => $group)
             if ($group?->getUsers()->contains($user))
+                return true;*/
+        foreach ($groups as $key => $group)
+            if ($group?->getGroupManager() == $user)
                 return true;
-
         return false;
     }
 
@@ -100,6 +102,9 @@ class RoomVoter extends Voter
     private function canEnter(Room $room, User $user): bool
     {
         if ($this->canManage($room, $user))
+            return true;
+
+        if (!$room->getIsPrivate())
             return true;
 
         // Find requests for the room where the user is attendee

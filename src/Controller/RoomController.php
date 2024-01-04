@@ -42,7 +42,13 @@ class RoomController extends AbstractController
         $user = $user instanceof User ? $user : null;
 
         // Get user's rooms
-        $myRooms = $user->getRooms();
+        $allRooms = $this->roomRepository->findAll();
+        $myRooms = [];
+        foreach ($allRooms as $room) {
+            if ($this->isGranted(RoomVoter::VIEW, $room)) {
+                $myRooms[] = $room;
+            }
+        }
 
         // Get rooms managed by the user (using RoomVoter)
         $allRooms = $this->roomRepository->findAll();

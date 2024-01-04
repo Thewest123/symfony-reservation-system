@@ -64,10 +64,11 @@ class RequestVoter extends Voter
 
     private function canManage(Request $request, User $user): bool
     {
+        if (!$this->security->isGranted(RoomVoter::MANAGE, $request->getRequestedRoom()))
+            return false;
+
         if ($this->canEdit($request, $user))
             return true;
-
-        // TODO
 
         return false;
     }
