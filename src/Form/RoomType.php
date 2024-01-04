@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Entity\Group;
 use App\Entity\User;
 use App\Entity\Building;
 use App\Repository\BuildingRepository;
@@ -29,6 +30,13 @@ class RoomType extends AbstractType
             ->add('room_manager', EntityType::class, [
                 'class' => User::class,
                 #'choices' => $options['user']
+            ])
+            ->add('belongs_to', EntityType::class, [
+                'class' => Group::class,
+            ])
+            ->add('occupants', EntityType::class, [
+                'class' => User::class,
+                'multiple' => true,
             ])
             ->add('is_private', CheckboxType::class, [
                 'required' => false,
