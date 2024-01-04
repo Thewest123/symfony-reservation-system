@@ -4,11 +4,11 @@ namespace App\Entity;
 
 use App\Repository\RequestRepository;
 use DateTimeInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: RequestRepository::class)]
 class Request
@@ -27,8 +27,12 @@ class Request
     private ?Room $requestedRoom = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Assert\GreaterThan('+0 hours')]
+//    #[Assert\GreaterThan('+0 hours')]
     private ?DateTimeInterface $date = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\GreaterThan(propertyPath: 'date')]
+    private ?DateTimeInterface $endDate = null;
 
     #[ORM\Column]
     private ?bool $approved = null;
@@ -41,8 +45,9 @@ class Request
         $this->attendees = new ArrayCollection();
     }
 
-    public function __toString() {
-        return $this->requestedRoom->getName()." ".$this->date;
+    public function __toString()
+    {
+        return $this->requestedRoom->getName() . " " . $this->date;
     }
 
     public function getId(): ?int
@@ -106,6 +111,18 @@ class Request
     public function setDate(DateTimeInterface $date): static
     {
         $this->date = $date;
+
+        return $this;
+    }
+
+    public function getEndDate(): ?DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(DateTimeInterface $endDate): static
+    {
+        $this->endDate = $endDate;
 
         return $this;
     }

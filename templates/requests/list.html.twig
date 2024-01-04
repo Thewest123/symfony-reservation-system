@@ -24,7 +24,8 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Místnost</th>
-                <th scope="col">Datum</th>
+                <th scope="col">Datum začátku</th>
+                <th scope="col">Datum konce</th>
                 <th scope="col">Počet uživatelů</th>
                 <th scope="col">Akce</th>
             </tr>
@@ -36,7 +37,8 @@
                                 href="{{ path('requests_detail', {id: req.getId()}) }}">Žádost {{ req.getId() }}</a>
                     </th>
                     <th scope="row">{{ req.getRequestedRoom().getName() }}</th>
-                    <td>{{ req.getDate() is empty ? "Neurčeno" : req.getDate()|date("d. m. Y", "Europe/Prague") }}</td>
+                    <td>{{ req.getDate() is empty ? "Neurčeno" : req.getDate()|date("d. m. Y H:i", "Europe/Prague") }}</td>
+                    <td>{{ req.getEndDate() is empty ? "Neurčeno" : req.getEndDate()|date("d. m. Y H:i", "Europe/Prague") }}</td>
                     <td>{{ req.getAttendeesCount() }}</td>
                     <td>
                         <a

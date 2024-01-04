@@ -4,6 +4,7 @@ namespace App\Security\Voter;
 
 use App\Entity\Room;
 use App\Entity\User;
+use DateTime;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\Security;
@@ -13,6 +14,7 @@ class RoomVoter extends Voter
     const VIEW = 'view';
     const EDIT = 'edit';
     const MANAGE = 'manage';
+    const ENTER = 'enter';
 
     public function __construct(
         private Security $security,
@@ -23,7 +25,7 @@ class RoomVoter extends Voter
     protected function supports(string $attribute, mixed $subject): bool
     {
         // if the attribute isn't one we support, return false
-        if (!in_array($attribute, [self::VIEW, self::EDIT, self::MANAGE])) {
+        if (!in_array($attribute, [self::VIEW, self::EDIT, self::MANAGE, self::ENTER])) {
             return false;
         }
 
@@ -50,7 +52,8 @@ class RoomVoter extends Voter
         return match ($attribute) {
             self::VIEW => $this->canView($subject, $user),
             self::EDIT => $this->canEdit($subject, $user),
-            self::MANAGE => $this->canManage($subject, $user)
+            self::MANAGE => $this->canManage($subject, $user),
+            self::ENTER => $this->canEnter($subject, $user),
         };
     }
 
@@ -92,5 +95,27 @@ class RoomVoter extends Voter
     private function canEdit(Room $room, User $user): bool
     {
         return $this->security->isGranted('ROLE_ADMIN');
+    }
+
+    private function canEnter(Room $room, User $user): bool
+    {
+        if ($this->canManage($room, $user))
+            return true;
+
+        // Find requests for the room where the user is attendee
+        $requests = $room->getRequests()->filter(
+            function ($request) use ($user) {
+                return
+                    $request->isApproved()
+                    && $request->getDate() <= new DateTime()
+                    && $request->getEndDate() >= new DateTime()
+                    && $request->getAttendees()->contains($user);
+            });
+
+        // If there is at least one request, the user can enter the room
+        if ($requests->count() > 0)
+            return true;
+
+        return false;
     }
 }

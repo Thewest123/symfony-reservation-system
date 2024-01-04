@@ -59,9 +59,16 @@
             </div>
 
             <div class="definition-card">
-                <dt>Datum</dt>
+                <dt>Datum začátku</dt>
                 <dd>
-                    {{ req.getDate()|date('d.m.Y H:i') }}
+                    {{ req.getDate()|date("d. m. Y H:i", "Europe/Prague") }}
+                </dd>
+            </div>
+
+            <div class="definition-card">
+                <dt>Datum konce</dt>
+                <dd>
+                    {{ req.getEndDate()|date("d. m. Y H:i", "Europe/Prague") }}
                 </dd>
             </div>
 
