@@ -25,6 +25,16 @@ class UserRepository extends ServiceEntityRepository
         $this->setEntityRepository($this);
     }
 
+    public function findByRole($role)
+    {
+        return $this->createQueryBuilder('u')
+            ->where("JSON_GET_TEXT(u.roles,0) = :role ")
+            ->setParameter('role', $role)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

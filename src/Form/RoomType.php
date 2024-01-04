@@ -6,6 +6,7 @@ use App\Entity\Building;
 use App\Repository\BuildingRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -29,7 +30,10 @@ class RoomType extends AbstractType
                 'class' => User::class,
                 #'choices' => $options['user']
             ])
-            ->add('is_private', CheckboxType::class);
+            ->add('is_private', CheckboxType::class, [
+                'required' => false,
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Provést']);
     }
 
     /*public function configureOptions(OptionsResolver $resolver): void

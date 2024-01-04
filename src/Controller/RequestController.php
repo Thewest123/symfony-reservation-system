@@ -2,16 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Entity\Request as Req;
-use App\Form\RequestType;
 use App\Form\DeleteType;
+use App\Form\RequestType;
 use App\Repository\RequestRepository;
+use App\Repository\RoomRepository;
 use App\Repository\UserRepository;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Security\Voter\RequestVoter;
+use App\Security\Voter\RoomVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,17 +19,41 @@ use Symfony\Component\Routing\Annotation\Route;
 class RequestController extends AbstractController
 {
     public function __construct(private readonly RequestRepository $requestRepository,
-                                private readonly UserRepository    $userRepository)
+                                private readonly UserRepository    $userRepository,
+                                private readonly RoomRepository    $roomRepository)
     {
     }
 
     #[Route('', name: 'list')]
     public function list(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
+
+        // Get all requests
+        $reqs = $this->requestRepository->findAll();
+
+        // Get user's requests (can be viewed by the user)
+        $myReqs = [];
+        foreach ($reqs as $req) {
+            if ($this->isGranted(RequestVoter::VIEW, $req)) {
+                $myReqs[] = $req;
+            }
+        }
+
+        // Sort user's requests by status
+        $approvedReqs = [];
+        $awaitingReqs = [];
+        foreach ($myReqs as $req) {
+            if ($req->isApproved()) {
+                $approvedReqs[] = $req;
+            } else {
+                $awaitingReqs[] = $req;
+            }
+        }
+
         return $this->render('requests/list.html.twig', [
-            // TODO: Replace with actual data
-            'approved_requests' => $this->requestRepository->findAll(),
-            'awaiting_requests' => $this->requestRepository->findAll(),
+            'approved_requests' => $approvedReqs,
+            'awaiting_requests' => $awaitingReqs,
         ]);
     }
 
@@ -42,6 +65,8 @@ class RequestController extends AbstractController
             throw $this->createNotFoundException('Žádost s ID ' . $id . 'nenalezena!');
         }
 
+        $this->denyAccessUnlessGranted(RequestVoter::VIEW, $req);
+
         return $this->render('requests/detail.html.twig', [
             'req' => $req,
         ]);
@@ -52,22 +77,49 @@ class RequestController extends AbstractController
     public function edit(Request $request, ?int $id): Response
     {
         if ($id !== null) {
-            $request = $this->findOrFail($id);
+            $req = $this->findOrFail($id);
         } else {
-            $request = new Req();
-            $request->setAuthor($this->getUser());
+            $req = new Req();
+            $req->setAuthor($this->getUser());
         }
-        $form = $this->createForm(RequestType::class, $request, ['request' => $request]);
+        $this->denyAccessUnlessGranted(RequestVoter::EDIT, $req);
 
-        return $this->render('requests/add.html.twig',
+        // Get all rooms the user can choose from
+        $allowedRooms = [];
+        foreach ($this->roomRepository->findAll() as $room) {
+            if ($this->isGranted(RoomVoter::VIEW, $room)) {
+                $allowedRooms[] = $room;
+            }
+        }
+
+        // Check permissions
+        $canApprove = $this->isGranted(RequestVoter::MANAGE, $req);
+
+        $form = $this->createForm(RequestType::class, $req, ['request' => $req, 'allowed_rooms' => $allowedRooms, 'can_approve' => $canApprove]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            // If new request is created by non-manager, they can't set isApproved, therefore it's null
+            if ($req->isApproved() === null) {
+                $req->setApproved(false);
+            }
+
+            $this->requestRepository->save($req, true);
+
+            return $this->redirectToRoute('requests_detail', ['id' => $req->getId(),]);
+        }
+
+        return $this->render('requests/edit.html.twig',
             ['form' => $form->createView(),
-             'request' => $request,]);
+                'request' => $request,]);
     }
 
     #[Route('/{id}/delete', name: 'delete', requirements: ['id' => '\d+'])]
     public function delete(Request $request, int $id): Response
     {
         $entity = $this->findOrFail($id);
+        $this->denyAccessUnlessGranted(RequestVoter::EDIT, $entity);
 
         $form = $this->createForm(DeleteType::class, [], [
             'entity' => 'request'
@@ -100,11 +152,13 @@ class RequestController extends AbstractController
     #[Route('/{id}/remove-attendee/{attendeeId}', name: 'remove-occupant', requirements: ['id' => '\d+', 'attendeeId' => '\d+'])]
     public function removeAttendee(Request $request, int $id, int $attendeeId): Response
     {
-        // Find room
+        // Find attendee
         $req = $this->requestRepository->find($id);
         if ($req === null) {
             throw $this->createNotFoundException('Místnost s ID ' . $id . 'nenalezena!');
         }
+
+        $this->denyAccessUnlessGranted(RequestVoter::EDIT, $req);
 
         // Find user
         $user = $this->userRepository->find($attendeeId);

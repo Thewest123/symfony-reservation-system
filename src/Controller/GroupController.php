@@ -7,6 +7,7 @@ use App\Form\DeleteType;
 use App\Form\GroupType;
 use App\Repository\GroupRepository;
 use App\Repository\RoomRepository;
+use App\Security\Voter\GroupVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,16 +24,19 @@ class GroupController extends AbstractController
     #[Route('', name: 'list')]
     public function list(Request $request): Response
     {
-        return $this->render('groups/list.html.twig', [
-            'groups' => $this->groupRepository->findAll(),
-        ]);
-    }
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED');
 
-    #[Route('/{id}/subgroups', name: 'subgroups')]
-    public function subgroups(Request $request, int $id): Response
-    {
-        return $this->render('groups/subgroups.html.twig', [
-            'groups' => $this->groupRepository->findRecursive($id),
+        // Only show groups that can be viewed by the user
+        $allGroups = $this->groupRepository->findAll();
+        $groups = [];
+        foreach ($allGroups as $group) {
+            if ($this->isGranted(GroupVoter::VIEW, $group)) {
+                $groups[] = $group;
+            }
+        }
+
+        return $this->render('groups/list.html.twig', [
+            'groups' => $groups,
         ]);
     }
 
@@ -44,8 +48,11 @@ class GroupController extends AbstractController
             throw $this->createNotFoundException('Skupina s ID ' . $id . 'nenalezena!');
         }
 
+        $this->denyAccessUnlessGranted(GroupVoter::VIEW, $group);
+
         return $this->render('groups/detail.html.twig', [
             'group' => $group,
+            'is_manager' => $this->isGranted(GroupVoter::MANAGE, $group),
         ]);
     }
 
@@ -60,19 +67,27 @@ class GroupController extends AbstractController
             $group = new Group();
             $group->setGroupManager($this->getUser());
         }
+        $this->denyAccessUnlessGranted(GroupVoter::EDIT, $group);
 
         // get available groups
         $user = $this->getUser();
         $groups = array_merge($user->getManagedGroups()->toArray(), $user->getGroups()->toArray());
         $subgroups = [];
-        foreach($groups as $key => $subgroup) {
+        foreach ($groups as $key => $subgroup) {
             $subgroups = array_merge($subgroups, $this->groupRepository->findRecursive($subgroup->getId()));
         }
         $subgroups = array_unique($subgroups, SORT_REGULAR);
 
         $form = $this->createForm(GroupType::class, $group, ['groups' => $subgroups]);
+        $form->handleRequest($request);
 
-        return $this->render('groups/add.html.twig',
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->groupRepository->save($group, true);
+
+            return $this->redirectToRoute('groups_detail', ['id' => $group->getId(),]);
+        }
+
+        return $this->render('groups/edit.html.twig',
             ['form' => $form->createView(),]);
     }
 
@@ -118,6 +133,8 @@ class GroupController extends AbstractController
             throw $this->createNotFoundException('Skupina s ID ' . $id . 'nenalezena!');
         }
 
+        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $group);
+
         // Find subgroup
         $subgroup = $this->groupRepository->find($subId);
         if ($subgroup === null) {
@@ -140,6 +157,8 @@ class GroupController extends AbstractController
         if ($group === null) {
             throw $this->createNotFoundException('Skupina s ID ' . $id . 'nenalezena!');
         }
+
+        $this->denyAccessUnlessGranted(GroupVoter::MANAGE, $group);
 
         // Find room
         $room = $this->roomRepository->find($roomId);

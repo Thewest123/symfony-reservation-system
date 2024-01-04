@@ -8,11 +8,13 @@
     <div class="page-header">
         <h1>Skupiny</h1>
         <div class="page-header__actions">
-            <a
-                    href="{{ path('groups_create') }}"
-                    class="button button--primary"
-            >Vytvořit</a
-            >
+            {% if is_granted('ROLE_ADMIN') %}
+                <a
+                        href="{{ path('groups_create') }}"
+                        class="button button--primary"
+                >Vytvořit</a
+                >
+            {% endif %}
         </div>
     </div>
 

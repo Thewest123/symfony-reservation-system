@@ -76,4 +76,9 @@ class Building
 
         return $this;
     }
+
+    public function getRoomsCount(): int
+    {
+        return $this->rooms->count();
+    }
 }

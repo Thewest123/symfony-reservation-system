@@ -158,7 +158,7 @@ class Room
         return $this;
     }
 
-    public function isIsPrivate(): ?bool
+    public function getIsPrivate(): ?bool
     {
         return $this->isPrivate;
     }

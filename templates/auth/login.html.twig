@@ -46,6 +46,11 @@
 
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
+            <label>
+                <input type="checkbox" name="_remember_me" checked>
+                Zústat přihlášen
+            </label>
+
             <input
                     type="submit"
                     value="Přihlásit se"
@@ -57,9 +62,9 @@
         {% endif %}
     </div>
 
-    <div class="login-form__links">
-        <a href="{{ path('app_register') }}">Registrace</a>
-    </div>
+    {# <div class="login-form__links"> #}
+    {#    <a href="{{ path('app_register') }}">Registrace</a> #}
+    {# </div> #}
 
 </main>
 </body>

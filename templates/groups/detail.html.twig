@@ -8,14 +8,18 @@
     <div class="page-header">
         <h1>{{ group.getName() }}</h1>
         <div class="page-header__actions">
-            <a
-                    href="{{ path('groups_edit', {id: group.getId()}) }}"
-                    class="button button--primary"
-            >Upravit</a>
-            <a
-                    href="{{ path('groups_delete', {id: group.getId()}) }}"
-                    class="button button--black"
-            >Odstranit</a>
+            {% if is_manager %}
+                <a
+                        href="{{ path('groups_edit', {id: group.getId()}) }}"
+                        class="button button--primary"
+                >Upravit</a>
+            {% endif %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a
+                        href="{{ path('groups_delete', {id: group.getId()}) }}"
+                        class="button button--black"
+                >Odstranit</a>
+            {% endif %}
         </div>
     </div>
 
@@ -90,11 +94,13 @@
                             </a>
                         </th>
                         <td>
-                            <a
-                                    href="{{ path('groups_remove-subgroup', {id: group.getId(), subId: sub.getId()}) }}"
-                                    class="button button--primary"
-                            >Odebrat</a
-                            >
+                            {% if is_granted('manage', group) %}
+                                <a
+                                        href="{{ path('groups_remove-subgroup', {id: group.getId(), subId: sub.getId()}) }}"
+                                        class="button button--primary"
+                                >Odebrat</a
+                                >
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -124,10 +130,12 @@
                             </a>
                         </th>
                         <td>
-                            <a
-                                    href="{{ path('groups_remove-room', {id: group.getId(), roomId: room.getId()}) }}"
-                                    class="button button--primary"
-                            >Odebrat</a>
+                            {% if is_granted('manage', group) %}
+                                <a
+                                        href="{{ path('groups_remove-room', {id: group.getId(), roomId: room.getId()}) }}"
+                                        class="button button--primary"
+                                >Odebrat</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
