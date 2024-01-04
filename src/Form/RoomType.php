@@ -1,21 +1,23 @@
 <?php
+
 namespace App\Form;
 
-use App\Entity\Group;
-use App\Entity\User;
 use App\Entity\Building;
+use App\Entity\Group;
+use App\Entity\Room;
+use App\Entity\User;
 use App\Repository\BuildingRepository;
-use Symfony\Component\Form\AbstractType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RoomType extends AbstractType
 {
-    public function __construct(private readonly BuildingRepository $buildingRepository, )
+    public function __construct(private readonly BuildingRepository $buildingRepository,)
     {
     }
 
@@ -44,10 +46,11 @@ class RoomType extends AbstractType
             ->add('submit', SubmitType::class, ['label' => 'Provést']);
     }
 
-    /*public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver
-            ->setRequired(['user'])
-            ->setAllowedTypes('user', User::class);
-    }*/
+            ->setDefaults([
+                'data_class' => Room::class,
+            ]);
+    }
 }
