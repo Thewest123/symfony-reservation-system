@@ -44,7 +44,10 @@ class RequestType extends AbstractType
                 'class' => User::class,
 //                'choices' => $occupants,
                 'multiple' => true,
-                #'expanded' => true
+                'expanded' => false,
+                'attr' => [
+                    'size' => 10,
+                ],
             ]);
 
         if ($options['can_approve'])
