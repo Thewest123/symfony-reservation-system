@@ -1,6 +1,7 @@
 <?php
 namespace App\Form;
 
+use App\Entity\Room;
 use App\Entity\User;
 use App\Entity\Group;
 use App\Repository\GroupRepository;
@@ -26,6 +27,19 @@ class GroupType extends AbstractType
             ->add('parent', EntityType::class, [
                 'class' => Group::class,
                 'choices' => $options['groups']
+            ])
+            ->add('users', EntityType::class, [
+                'class' => User::class,
+                'multiple' => true
+            ])
+            ->add('rooms', EntityType::class, [
+                'class' => Room::class,
+                'multiple' => true
+            ])
+            ->add('subgroups', EntityType::class, [
+                'class' => Group::class,
+                'multiple' => true,
+                'required' => false
             ])
             ->add('submit', SubmitType::class, ['label' => 'Provést']);
     }
