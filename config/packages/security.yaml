@@ -1,5 +1,6 @@
 security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
+    enable_authenticator_manager: true
     password_hashers:
         App\Entity\User:
             algorithm: bcrypt
@@ -11,12 +12,26 @@ security:
                 class: App\Entity\User
                 property: username
     firewalls:
+        login:
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login # or api_login_check as defined in config/routes.yaml
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+        api:
+            pattern: ^/api/
+            stateless: true
+            provider: app_user_provider
+            jwt: ~
+
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            lazy: true
-            provider: app_user_provider
+#            lazy: true
+#            provider: app_user_provider
 #            provider: users_in_memory
 #            form_login:
 #                    login_path: app_login
@@ -44,6 +59,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/api/login, roles: PUBLIC_ACCESS }
+        - { path: ^/api/me, roles: PUBLIC_ACCESS }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
     #access_decision_manager:

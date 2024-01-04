@@ -59,6 +59,15 @@ class GroupRepository extends ServiceEntityRepository
         return $newGroups;
     }
 
+    public function findByName($name)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
 //    /**
 //     * @return Group[] Returns an array of Group objects
 //     */
