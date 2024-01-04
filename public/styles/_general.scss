@@ -4,6 +4,13 @@ body {
     min-height: 100vh;
 }
 
+// Hide menu on small screens
+@media (max-width: $breakpoint-sm) {
+    body {
+        grid-template-columns: 1fr;
+    }
+}
+
 // Empty page (login, register, etc)
 .empty {
     display: flex;
@@ -21,6 +28,7 @@ body {
 .content {
     padding: 1.5rem;
     background-color: $color-background;
+    min-height: 100vh;
 
     h1 {
         margin: 0;

@@ -31,3 +31,10 @@ dd {
     margin: 0;
     padding: 0;
 }
+
+// Dont set min width on mobile
+@media (max-width: $breakpoint-sm) {
+    dl {
+        grid-template-columns: 1fr;
+    }
+}

@@ -5,6 +5,9 @@ body {
   grid-template-columns: 15rem 1fr;
   min-height: 100vh; }
 
+@media (max-width: 640px) {
+  body {
+    grid-template-columns: 1fr; } }
 .empty {
   display: flex;
   align-items: center;
@@ -17,7 +20,8 @@ body {
 
 .content {
   padding: 1.5rem;
-  background-color: #fafafa; }
+  background-color: #fafafa;
+  min-height: 100vh; }
   .content h1 {
     margin: 0; }
 
@@ -166,6 +170,22 @@ input[type=submit]:hover {
     .menu__logout:hover {
       background-color: #f5f5f5; }
 
+.menu-toggle {
+  display: none;
+  top: 1rem;
+  right: 1rem;
+  width: 100vw;
+  height: 2rem; }
+
+.menu-hidden {
+  display: flex; }
+
+@media (max-width: 640px) {
+  .menu-hidden {
+    display: none; }
+
+  .menu-toggle {
+    display: block; } }
 .login-form__title {
   text-align: center;
   font-weight: bold;
@@ -228,6 +248,9 @@ input[type=submit]:hover {
     .rooms__card:hover {
       background-color: #fafafa; }
 
+@media (max-width: 640px) {
+  .rooms {
+    grid-template-columns: 1fr; } }
 .page-header {
   display: flex;
   flex-direction: row;
@@ -304,5 +327,9 @@ dd {
   color: #000;
   margin: 0;
   padding: 0; }
+
+@media (max-width: 640px) {
+  dl {
+    grid-template-columns: 1fr; } }
 
 /*# sourceMappingURL=main.css.map */
