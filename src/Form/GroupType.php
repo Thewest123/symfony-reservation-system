@@ -23,11 +23,13 @@ class GroupType extends AbstractType
             ])
             ->add('parent', EntityType::class, [
                 'class' => Group::class,
-                'choices' => $options['groups']
+                'choices' => $options['groups'],
+                'required' => false,
             ])
             ->add('users', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
+                'required' => false,
                 'by_reference' => false,
             ])
             ->add('rooms', EntityType::class, [
