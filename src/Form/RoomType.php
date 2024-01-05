@@ -35,10 +35,13 @@ class RoomType extends AbstractType
             ])
             ->add('belongs_to', EntityType::class, [
                 'class' => Group::class,
+                'required' => false,
             ])
             ->add('occupants', EntityType::class, [
                 'class' => User::class,
                 'multiple' => true,
+                'required' => false,
+                'by_reference' => false,
             ])
             ->add('is_private', CheckboxType::class, [
                 'required' => false,
