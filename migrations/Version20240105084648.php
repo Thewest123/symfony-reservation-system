@@ -112,14 +112,15 @@ final class Version20240105084648 extends AbstractMigration
         $this->addSql('insert into "user" (id, name, username, roles, password) values (50, \'Robinetta Ennew\', \'Ennew\', \'["ROLE_USER"]\', \'$2y$13$nsftqHsws6WnMKLRECQB7.T42lMiOeTbAoxodlDZg7shcSJFIAwge\')');
         $this->addSql('insert into "user" (id, name, username, roles, password) values (51, \'Maggi Plunket\', \'Plunket\', \'["ROLE_USER"]\', \'$2y$13$nsftqHsws6WnMKLRECQB7.T42lMiOeTbAoxodlDZg7shcSJFIAwge\')');
         $this->addSql('insert into "user" (id, name, username, roles, password) values (52, \'Conny Piell\', \'Piell\', \'["ROLE_USER"]\', \'$2y$13$nsftqHsws6WnMKLRECQB7.T42lMiOeTbAoxodlDZg7shcSJFIAwge\')');
-        $this->addSql('SELECT setval(pg_get_serial_sequence(\'user\', \'id\'), 52)');
+        $this->addSql('SELECT setval(\'user_id_seq\', 100)');
 
 
 
 
         $this->addSql('insert into building (id, name) values (2, \'Cyrtandra\')');
         $this->addSql('insert into building (id, name) values (3, \'Yellowseed False Pimpernel\')');
-        $this->addSql('SELECT setval(pg_get_serial_sequence(\'building\', \'id\'), 3)');
+        $this->addSql('SELECT setval(\'building_id_seq\', 100)');
+
 
 
 
@@ -135,7 +136,8 @@ final class Version20240105084648 extends AbstractMigration
         $this->addSql('insert into "group" (id, name, parent_id, group_manager_id) values (8, \'Turner-Runolfsdottir\', 2, 1)');
         $this->addSql('insert into "group" (id, name, parent_id, group_manager_id) values (9, \'Erdman-Franecki\', 7, 38)');
         $this->addSql('insert into "group" (id, name, parent_id, group_manager_id) values (10, \'Bosco, Becker and Haag\', 9, 47)');
-        $this->addSql('SELECT setval(pg_get_serial_sequence(\'group\', \'id\'), 3)');
+        $this->addSql('SELECT setval(\'group_id_seq\', 100)');
+
 
 
 
@@ -258,7 +260,7 @@ final class Version20240105084648 extends AbstractMigration
         $this->addSql('insert into room (id, room_manager_id, building_id, belongs_to_id, name, is_private) values (17, 7, 3, 5, \'lobortis\', false)');
         $this->addSql('insert into room (id, room_manager_id, building_id, belongs_to_id, name, is_private) values (18, 48, 2, 10, \'magnis dis\', true)');
         $this->addSql('insert into room (id, room_manager_id, building_id, belongs_to_id, name, is_private) values (19, 22, 3, 2, \'mauris\', false)');
-        $this->addSql('SELECT setval(pg_get_serial_sequence(\'room\', \'id\'), 19)');
+        $this->addSql('SELECT setval(\'room_id_seq\', 100)');
 
 
 
@@ -429,7 +431,7 @@ final class Version20240105084648 extends AbstractMigration
         $this->addSql('insert into request (id, author_id, requested_room_id, date, end_date, approved) values (60, 47, 3, \'2023-11-17 01:55:00\', \'2024-11-02 11:32:07\', true)');
         $this->addSql('insert into request (id, author_id, requested_room_id, date, end_date, approved) values (61, 38, 19, \'2023-11-24 16:55:08\', \'2024-11-02 11:32:07\', false)');
         $this->addSql('insert into request (id, author_id, requested_room_id, date, end_date, approved) values (62, 5, 4, \'2023-03-08 22:57:57\', \'2024-11-02 11:32:07\', true)');
-        $this->addSql('SELECT setval(pg_get_serial_sequence(\'request\', \'id\'), 62)');
+        $this->addSql('SELECT setval(\'request_id_seq\', 100);');
 
 
 
