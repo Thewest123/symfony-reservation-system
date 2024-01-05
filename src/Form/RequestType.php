@@ -17,7 +17,8 @@ class RequestType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $occupants = $options['request']->getRequestedRoom()?->getOccupants() ?? [];
+        $request = $options['request'];
+        //$occupants = $options['request']->getRequestedRoom()?->getOccupants() ?? [];
 
         $builder
             ->add(
@@ -39,22 +40,22 @@ class RequestType extends AbstractType
             ->add('requestedRoom', EntityType::class, [
                 'class' => Room::class,
                 'choices' => $options['allowed_rooms']
-            ])
-            ->add('attendees', EntityType::class, [
-                'class' => User::class,
-//                'choices' => $occupants,
-                'multiple' => true,
-                'expanded' => false,
-                'attr' => [
-                    'size' => 10,
-                ],
             ]);
+            
 
         if ($options['can_approve'])
             $builder->add('approved', CheckboxType::class,
                 [
                     'label' => 'Schváleno',
                     'required' => false,
+                ])
+                ->add('attendees', EntityType::class, [
+                    'class' => User::class,
+                    'multiple' => true,
+                    'expanded' => false,
+                    'attr' => [
+                        'size' => 10,
+                    ],
                 ]);
 
         $builder->add('submit', SubmitType::class, ['label' => 'Provést']);
