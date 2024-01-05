@@ -1,6 +1,15 @@
 version: '3.8'
 
 services:
+  web:
+    build: .
+    container_name: web
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+    entrypoint: /app/entrypoint.sh
+
   postgres:
     image: postgres:16-alpine
     container_name: postgres
