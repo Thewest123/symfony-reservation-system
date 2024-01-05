@@ -61,6 +61,17 @@ class RequestRestController extends AbstractRestController
 //        return $this->respond( $requestDto, Response::HTTP_OK);
     }
 
+    #[Rest\Post('/{id}', name: 'api_requests_approve', requirements: ['id' => '\d+'])]
+    public function approve(int $id): Response
+    {
+        $request = $this->findOrFail($id);
+        $this->denyAccessUnlessGranted(RequestVoter::MANAGE, $request);
+
+        $request->setApproved(true);
+        $this->requestRepository->save($request);
+        return $this->respond([ "message" => "Request by id $id was successfully approved"], Response::HTTP_OK);
+    }
+
 
     #[Rest\Delete('/{id}', name: 'api_requests_remove', requirements: ['id' => '\d+'])]
     public function remove(int $id): Response
@@ -68,7 +79,7 @@ class RequestRestController extends AbstractRestController
         $request = $this->findOrFail($id);
         $this->denyAccessUnlessGranted(RequestVoter::MANAGE, $request);
 
-        $this->requestRepository->remove($id);
+        $this->requestRepository->remove($request);
         return $this->respond([ "message" => "Request by id $id was successfully removed from database"], Response::HTTP_OK);
     }
 

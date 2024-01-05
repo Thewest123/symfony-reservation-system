@@ -3,7 +3,15 @@
 {% block title %}
     {{ room.getName() }}
 {% endblock %}
-
+{% block javascript %}
+    {{ parent() }}
+    <script defer type="text/javascript" src="{{ asset('scripts/request.js') }}"></script>
+    <script type="text/javascript">
+        window.addEventListener('DOMContentLoaded', () => (new Approve(
+                document.querySelectorAll('.request'))
+            .activate()))
+	</script>
+{% endblock %}
 {% block content %}
     <div class="page-header">
         <h1>{{ room.getName() }}</h1>
@@ -152,7 +160,7 @@
                     </thead>
                     <tbody>
                     {% for req in room.getRequests() %}
-                        <tr aria-rowindex="{{ req.getId() }}">
+                        <tr aria-rowindex="{{ req.getId() }}" class="request" reqid={{req.getId()}}>
                             <th scope="row">
                                 <a href="{{ path('requests_detail', {id: req.getId()}) }}">
                                     {{ req.getId() }}
